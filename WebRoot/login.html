@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="renderer" content="webkit">
+	<title>数据服务管理平台</title>
+    <script src="./vendors/jquery/jquery-1.11.1.min.js"></script>
+    <script src="./vendors/jquery/jquery.cookie.js"></script>
+    <style type="text/css">
+    *, :after, :before {
+    box-sizing: border-box;
+}
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+			html,body{
+				padding: 0;
+				margin: 0;
+				width: 100%;
+				height: 100%;
+				font-family: Helvetica, 'Microsoft YaHei', sans-serif;
+			}
+			div{
+			margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 14px;
+    font-weight: 400;
+    vertical-align: baseline;
+			}
+			#container{
+				width: 848px;
+				margin: 0 auto;
+				padding-top: 100px;
+			}
+			.title-wrapper{
+				margin-left: 15px;
+				width: 557px;
+				height: 66px;
+				text-indent: -9999px;
+				overflow: hidden;
+				background: url(./images/title.png) no-repeat;
+			}
+			.form-wrapper{
+				position: relative;
+				height: 391px;
+				background: url(./img/login_bg.png) no-repeat;
+				background-size: cover;
+			}
+			.form-inner-wrapper{
+				position: absolute;
+				top:50px;
+				right:100px;
+				width:300px;
+			}
+			.form-wrapper .form-title{
+				margin-bottom:30px;
+			}
+			.form-title h3{
+				color: #c46118;
+			}
+			.form-title span{
+				color:#a5acb2;
+				font-size:18px;
+				font-family: Arial;
+			}
+			.merged input:last-child {
+				border-left: transparent;
+			}
+			.merged .input-group-addon {
+				color: #a5acb2;
+				background-color: #fff;
+			}
+			.copyright{
+				color: #d3f2ff;
+			}
+			.copyright a{
+				color:#d3f2ff;
+			}
+			.ant-card {
+    background: #fff;
+    border-radius: 2px;
+    font-size: 12px;
+    transition: all .3s;
+}
+.ant-card-body {
+    zoom: 1;
+}
+.ant-card-body:after, .ant-card-body:before {
+    content: " ";
+    display: table;
+}
+.ant-tabs:after, .ant-tabs:before {
+    content: " ";
+    display: table;
+}
+.ant-tabs {
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    zoom: 1;
+    color: rgba(0,0,0,.65);
+}
+.ant-tabs-bar {
+    outline: none;
+}
+.ant-tabs-nav-container {
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.5;
+    box-sizing: border-box;
+    position: relative;
+    white-space: nowrap;
+    margin-bottom: -1px;
+    zoom: 1;
+}
+.ant-tabs-nav-container:after, .ant-tabs-nav-container:before {
+    content: " ";
+    display: table;
+}
+.ant-tabs-nav-wrap {
+    overflow: hidden;
+    margin-bottom: -1px;
+}
+.ant-tabs-nav-scroll {
+    overflow: hidden;
+    white-space: nowrap;
+}
+.ant-tabs-nav {
+    box-sizing: border-box;
+    padding-left: 0;
+    transition: transform .5s cubic-bezier(.645,.045,.355,1);
+    position: relative;
+    margin: 0;
+    list-style: none;
+    display: inline-block;
+}
+.ant-tabs-nav:after, .ant-tabs-nav:before {
+    display: table;
+    content: " ";
+}
+.ant-tabs-bottom .ant-tabs-ink-bar-animated, .ant-tabs-top .ant-tabs-ink-bar-animated {
+    transition: transform .3s cubic-bezier(.645,.045,.355,1),width .3s cubic-bezier(.645,.045,.355,1);
+}
+.ant-tabs-ink-bar {
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    bottom: 1px;
+    box-sizing: border-box;
+    height: 2px;
+    background-color: #108ee9;
+    transform-origin: 0 0;
+}
+.ant-tabs-nav .ant-tabs-tab {
+    display: inline-block;
+    height: 100%;
+    margin-right: 24px;
+    box-sizing: border-box;
+    position: relative;
+    padding: 8px 20px;
+    transition: color .3s cubic-bezier(.645,.045,.355,1);
+    cursor: pointer;
+    text-decoration: none;
+}
+.ant-tabs:not(.ant-tabs-vertical)>.ant-tabs-content-animated {
+    display: flex;
+    flex-direction: row;
+    will-change: margin-left;
+    transition: margin-left .3s cubic-bezier(.645,.045,.355,1);
+}
+.ant-tabs:not(.ant-tabs-vertical)>.ant-tabs-content {
+    width: 100%;
+}
+.ant-tabs:not(.ant-tabs-vertical)>.ant-tabs-content>.ant-tabs-tabpane {
+    flex-shrink: 0;
+    width: 100%;
+    transition: opacity .45s;
+    opacity: 1;
+}
+.content .ant-card-body .ant-tabs-tabpane {
+    padding: 0 30px 30px;
+}
+.ant-row {
+    position: relative;
+    margin-left: 0;
+    margin-right: 0;
+    height: auto;
+    zoom: 1;
+    display: block;
+}
+.ant-form-item {
+    font-size: 12px;
+    margin-bottom: 24px;
+    color: rgba(0,0,0,.65);
+    vertical-align: top;
+}
+.ant-row:after, .ant-row:before {
+    content: " ";
+    display: table;
+}
+.ant-form-item-control {
+    line-height: 32px;
+    position: relative;
+    zoom: 1;
+}
+.ant-form-item-control:after, .ant-form-item-control:before {
+    content: " ";
+    display: table;
+}
+.ant-input-affix-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+.ant-input-affix-wrapper .ant-input-prefix {
+    left: 7px;
+}
+.ant-input-affix-wrapper .ant-input-prefix, .ant-input-affix-wrapper .ant-input-suffix {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    line-height: 0;
+    color: rgba(0,0,0,.65);
+}
+.ant-input-affix-wrapper .ant-input:not(:first-child) {
+    padding-left: 24px;
+}
+.ant-input-affix-wrapper .ant-input {
+    min-height: 100%;
+}
+.ant-input-affix-wrapper .ant-input {
+    z-index: 1;
+}
+.ant-input-lg {
+    padding: 6px 7px;
+    height: 32px;
+}
+.ant-input {
+    position: relative;
+    display: inline-block;
+    padding: 4px 7px;
+    width: 100%;
+    height: 28px;
+    cursor: text;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(0,0,0,.65);
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    transition: all .3s;
+}
+.ant-checkbox-wrapper:not(:last-child) {
+    margin-right: 8px;
+}
+.ant-checkbox-wrapper {
+    cursor: pointer;
+    font-size: 12px;
+    display: inline-block;
+}
+.ant-checkbox {
+    white-space: nowrap;
+    cursor: pointer;
+    outline: none;
+    display: inline-block;
+    line-height: 1;
+    position: relative;
+    vertical-align: text-bottom;
+}
+form input[type=checkbox], form input[type=radio] {
+    width: 14px;
+    height: 14px;
+}
+input[type=checkbox], input[type=radio] {
+    line-height: normal;
+}
+.ant-checkbox-input {
+    position: absolute;
+    left: 0;
+    z-index: 1;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+[type=checkbox], [type=radio] {
+    box-sizing: border-box;
+    padding: 0;
+}
+.ant-checkbox-checked .ant-checkbox-inner, .ant-checkbox-indeterminate .ant-checkbox-inner {
+    background-color: #108ee9;
+    border-color: #108ee9;
+}
+.ant-checkbox-inner {
+    position: relative;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    background-color: #fff;
+    transition: all .3s;
+}
+.ant-checkbox-checked .ant-checkbox-inner:after {
+    transform: rotate(45deg) scale(1);
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    display: table;
+    width: 5px;
+    height: 8px;
+    border: 2px solid #fff;
+    border-top: 0;
+    border-left: 0;
+    content: " ";
+    transition: all .2s cubic-bezier(.12,.4,.29,1.46) .1s;
+}
+.ant-checkbox-inner:after {
+    transform: rotate(45deg) scale(0);
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    display: table;
+    width: 5px;
+    height: 8px;
+    border: 2px solid #fff;
+    border-top: 0;
+    border-left: 0;
+    content: " ";
+    transition: all .1s cubic-bezier(.71,-.46,.88,.6);
+}
+.ant-checkbox-checked:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+    border: 1px solid #108ee9;
+    content: "";
+    animation: antCheckboxEffect .36s ease-in-out;
+    animation-fill-mode: both;
+    visibility: hidden;
+}
+.ant-checkbox+span, .ant-checkbox-wrapper+span {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.ant-btn-lg {
+    position: relative;
+}
+.ant-btn-primary {
+    color: #fff;
+    background-color: #108ee9;
+    border-color: #108ee9;
+}
+.ant-btn-lg {
+    padding: 0 15px;
+    font-size: 14px;
+    border-radius: 4px;
+    height: 32px;
+}
+.ant-btn, .ant-btn:active, .ant-btn:focus {
+    outline: 0;
+}
+.ant-btn, .ant-btn>.anticon {
+    line-height: 1;
+}
+.ant-btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 500;
+    text-align: center;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 0 15px;
+    font-size: 12px;
+    border-radius: 4px;
+    height: 28px;
+    user-select: none;
+    transition: all .3s cubic-bezier(.645,.045,.355,1);
+    position: relative;
+    color: rgba(0,0,0,.65);
+    background-color: #fff;
+    border-color: #d9d9d9;
+}
+[type=reset], [type=submit], button, html [type=button] {
+    -webkit-appearance: button;
+}
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+}
+			.content {
+  background: url('img/loginbkgd.png') no-repeat;
+  background-position: center center;
+  background-size: cover;
+  height: 500px;
+  width: 100%;
+}
+.content .ant-card {
+  opacity: .9;
+}
+.content .ant-card-body {
+  padding: 0;
+}
+.content .ant-card-body .ant-tabs-nav .ant-tabs-tab {
+  border: none;
+  width: 200px;
+  text-align: center;
+  margin: 0;
+  padding: 12px 20px;
+  background-color: #3393f0;
+  color: #fff;
+}
+.content .ant-card-body .ant-tabs-tab-active.ant-tabs-tab {
+  color: #3393f0;
+  background-color: #fff;
+}
+.content .ant-card-body .ant-tabs-ink-bar {
+  display: none !important;
+}
+.content .ant-card-body .ant-tabs-bar {
+  border: none;
+  margin-bottom: 45px;
+}
+.content .ant-card-body .ant-tabs-nav-container-scrolling {
+  padding: 0;
+}
+.content .ant-card-body .ant-tabs-nav-container-scrolling .ant-tabs-tab-prev,
+.content .ant-card-body .ant-tabs-nav-container-scrolling .ant-tabs-tab-next {
+  display: none;
+}
+.content .ant-card-body .ant-tabs-tabpane {
+  padding: 0 30px 30px 30px;
+}
+.content .ant-card-body .ant-tabs-tabpane .ant-input-lg {
+  height: 40px;
+  font-size: 16px;
+  color: #3393f0;
+}
+.content .ant-card-body .ant-input-affix-wrapper .ant-input:not(:first-child) {
+  padding-left: 30px;
+}
+.content .ant-card-body .ant-form-item:nth-of-type(1) {
+  margin-bottom: 35px;
+}
+.content .ant-card-body .ant-btn-lg {
+  width: 100%;
+  background-color: #f08328;
+  border: none;
+  margin-top: 15px;
+  height: 40px;
+  font-size: 16px;
+}
+.content .ant-card-body .username-icon,
+.content .ant-card-body .password-icon {
+  background: url('img/user.png') no-repeat;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+}
+.content .ant-card-body .password-icon {
+  background: url('img/password.png') no-repeat;
+  background-size: contain;
+}
+/* header */
+.circle {
+  background: url('img/circle.png') no-repeat;
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  background-size: contain;
+  margin-bottom: -2.5px;
+  margin-left: 3px;
+}
+			
+		</style>
+</head>
+<body style="">
+  <div id="app" style="height: 100%">
+   <div data-reactroot="" style="height: 100%;">
+    <div style="background: rgb(255, 255, 255); height: 100%;">
+     <div style="background: rgb(83, 83, 83); padding-left: 200px; width: 100%; height: 30px; color: rgb(255, 255, 255); line-height: 30px; font-size: 12px;">
+      <!-- react-text: 9778 -->欢迎来到登录界面 
+      <!-- /react-text -->
+      <span class="circle"></span>
+      <div class="fr" style="margin-right: 20%;">
+       <a style="margin-right: 30px; color: rgb(255, 255, 255);">首页</a>
+       <a style="color: rgb(255, 255, 255);">帮助</a>
+      </div>
+     </div>
+     <div>
+      <div style="color: rgb(0, 93, 188); margin: 30px 0px 30px 200px; width: 300px;">
+       <span style="letter-spacing: 10px; font-weight: 900; font-size: 26px;">数据服务总线</span>
+       <br />
+       <span style="letter-spacing: 3.5px; font-weight: 900; font-size: 15px;">DATA SERVICE BUS</span>
+      </div>
+      <div class="content" style="position: relative;">
+       <div class="ant-card" style="width: 400px; height: 420px; position: absolute; left: 55%; top: 40px;">
+        <div class="ant-card-body">
+         <div class="ant-tabs ant-tabs-top ant-tabs-line">
+          <div role="tablist" class="ant-tabs-bar" tabindex="0">
+           <div class="ant-tabs-nav-container">
+            <div class="ant-tabs-nav-wrap">
+             <div class="ant-tabs-nav-scroll">
+              <div class="ant-tabs-nav ant-tabs-nav-animated">
+               <div class="ant-tabs-ink-bar ant-tabs-ink-bar-animated" style="display: block; transform: translate3d(0px, 0px, 0px); width: 200px;"></div>
+               <div id='t1' role="tab" aria-disabled="false" aria-selected="true" class="ant-tabs-tab-active ant-tabs-tab">
+                登录后台管理系统
+               </div>
+               <div id='t2' role="tab" aria-disabled="false" aria-selected="false" class=" ant-tabs-tab">
+                登录业务控制台
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div id='p' class="ant-tabs-content ant-tabs-content-animated" style="margin-left: 0%;">
+           <div role="tabpanel" aria-hidden="false" class="ant-tabs-tabpane ant-tabs-tabpane-active">
+            <div class="ant-form ant-form-horizontal login-form">
+             <div class="ant-row ant-form-item">
+              <div class="ant-form-item-control-wrapper">
+               <div class="ant-form-item-control has-success">
+                <span class="ant-input-affix-wrapper"><span class="ant-input-prefix"><span class="username-icon"></span></span><input type="text" placeholder="Username" value="" id="back_username" class="ant-input ant-input-lg" /></span>
+               </div>
+              </div>
+             </div>
+             <div class="ant-row ant-form-item">
+              <div class="ant-form-item-control-wrapper">
+               <div class="ant-form-item-control has-success">
+                <span class="ant-input-affix-wrapper"><span class="ant-input-prefix"><span class="password-icon"></span></span><input type="password" placeholder="Password" value="" id="back_password"  class="ant-input ant-input-lg" /></span>
+               </div>
+              </div>
+             </div>
+             <div class="ant-row ant-form-item">
+              <div class="ant-form-item-control-wrapper">
+               <div class="ant-form-item-control has-success">
+                <!-- <label class="ant-checkbox-wrapper"><span class="ant-checkbox ant-checkbox-checked"><input type="checkbox" class="ant-checkbox-input" data-__meta="[object Object]" value="on" /><span class="ant-checkbox-inner"></span></span><span>记住密码</span></label> -->
+                <button id='btn1' class="ant-btn login-form-button ant-btn-primary ant-btn-lg" style='color:white;'><span>登 录</span></button>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+           <div role="tabpanel" aria-hidden="true" class="ant-tabs-tabpane ant-tabs-tabpane-inactive">
+   <form class="ant-form ant-form-horizontal login-form">
+    <div class="ant-row ant-form-item">
+     <div class="ant-form-item-control-wrapper">
+      <div class="ant-form-item-control has-success">
+       <span class="ant-input-affix-wrapper"><span class="ant-input-prefix"><span class="username-icon"></span></span><input type="text" placeholder="Username" value="" id="business_username" class="ant-input ant-input-lg" /></span>
+      </div>
+     </div>
+    </div>
+    <div class="ant-row ant-form-item">
+     <div class="ant-form-item-control-wrapper">
+      <div class="ant-form-item-control has-success">
+       <span class="ant-input-affix-wrapper"><span class="ant-input-prefix"><span class="password-icon"></span></span><input type="password" placeholder="Password" value="" id="business_password" class="ant-input ant-input-lg" /></span>
+      </div>
+     </div>
+    </div>
+    <div class="ant-row ant-form-item">
+     <div class="ant-form-item-control-wrapper">
+      <div class="ant-form-item-control has-success">
+       <!-- <label class="ant-checkbox-wrapper"><span class="ant-checkbox ant-checkbox-checked"><input type="checkbox" class="ant-checkbox-input" data-__meta="[object Object]" value="on" /><span class="ant-checkbox-inner"></span></span><span>记住密码</span></label> -->
+       <button id='btn2' class="ant-btn login-form-button ant-btn-primary ant-btn-lg" style='color:white;'><span>登 录</span></button>
+      </div>
+     </div>
+    </div>
+   </form>
+  </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div style="width: 100%; text-align: center; color: rgb(0, 0, 0); margin-top: 100px;">
+      <p>推荐浏览器：Chrome浏览器 火狐浏览器</p>
+      <p style="color: rgba(0, 0, 0, 0.498039); margin-top: 20px;">COPY RIGHT @2015 宁波弘泰水利信息科技有限公司</p>
+     </div>
+    </div>
+   </div>
+  </div>
+<script>
+$('#t1').on('click',function(){
+	$('#p').css('margin-left','0%');
+	$(this).addClass('ant-tabs-tab-active')
+	.next().removeClass('ant-tabs-tab-active');
+});
+$('#t2').on('click',function(){
+	$('#p').css('margin-left','-100%');
+	$(this).addClass('ant-tabs-tab-active')
+	.prev().removeClass('ant-tabs-tab-active');
+});
+$('#btn1').on('click',function(){
+	$.post('login!public',
+			{username:$('#back_username').val(),userpassword:$('#back_password').val()},function(json){
+				if(json.result){
+					$.cookie('token',json.token);
+					$.cookie('username',$('#back_username').val())
+					window.location.href="index.html";
+				}else{
+					alert(json.message);
+				}
+			});
+});
+$('#btn2').on('click',function(event){
+	event.preventDefault();
+	event.stopPropagation();
+	$.post('applogin!public',
+			{username:$('#business_username').val(),userpassword:$('#business_password').val()},function(json){
+				if(json.result){
+					$.cookie('token',json.token);
+					$.cookie('username',$('#business_username').val())
+					window.location.href="index2.html";
+				}else{
+					alert(json.message);
+				}
+			});
+})
+</script>
+ </body>
+</html>

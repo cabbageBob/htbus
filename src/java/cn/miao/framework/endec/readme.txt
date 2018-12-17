@@ -1,0 +1,13 @@
+RSA Public Key
+            modulus: 99d3d3fe384fa6bfc98fca99e5363973daaef1eabcc8efccdc128b80f5bf24f48c40da4302142a7c0c698cb7803066829cc98653088b790998f583abe2c0d707
+    public exponent: 10001
+
+RSA Private CRT Key
+            modulus: 99d3d3fe384fa6bfc98fca99e5363973daaef1eabcc8efccdc128b80f5bf24f48c40da4302142a7c0c698cb7803066829cc98653088b790998f583abe2c0d707
+    public exponent: 10001
+   private exponent: 4193f7a542165acd1a3dadae8bf3e0ec4e0714e4f0946cfe95b76637950c66d118d9d8d63f250870d76df7f34d546a623aa2fe9ce13e4a7e55340e7eaae6d129
+             primeP: f8690f7c36131d1445460650c67dbf01d1bd548a1268d4e6c847ab7d83c1bf53
+             primeQ: 9e86fcf12f2bb586a3b2dfb31aa4a0efc5e5659564f9f394c1f11327d33ff6fd
+     primeExponentP: a704fc84675732960e7da68168f3e319360c366b1f359cf00e7921b4a2820241
+     primeExponentQ: 8024bdf2781eeced9905ceae08ab6b2c66dbb7f1bb5e10f7fe8dd0de30755441
+     crtCoefficient: 17621474d1756e1aadac2f94e92a91c8b77dc4b27bf603b9aaf082efc3be4f46

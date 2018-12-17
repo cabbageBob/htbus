@@ -1,0 +1,41 @@
+<div>
+	<el-col :span='24' class='toolbar'>
+			<el-form :inline="true" :model="filters">
+				<el-form-item>
+					<el-button type="primary">注册实例</el-button>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="default">导出数据字典</el-button>
+				</el-form-item>
+			</el-form>
+		</el-col>
+		<div>
+		
+	<div style='display:flex;clear:both;'>
+		<el-tree style='flex:0 0 300px;margin:0 16px 0 0;'></el-tree>
+		<el-table :data="data" highlight-current-row :loading="listLoading" @selection-change="selsChange" style="flex:1;">
+			<el-table-column type="selection" width="55">
+			</el-table-column>
+			<el-table-column type="index" width="60">
+			</el-table-column>
+			<el-table-column prop="name" label="应用名称" width="200" sortable>
+			</el-table-column>
+			<el-table-column prop="company" label="开发商" width="100" sortable>
+			</el-table-column>
+			<el-table-column prop="url" label="访问地址" width="200" sortable>
+			</el-table-column>
+			
+			<el-table-column prop="token" label="令牌" min-width="180" sortable>
+			</el-table-column>
+			<el-table-column label="操作" width="150">
+				<template scope="scope">
+					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+	</div>
+
+	
+	</div>
+</div>

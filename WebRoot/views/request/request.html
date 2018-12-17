@@ -1,0 +1,59 @@
+<div>
+	<el-col :span='24' class='toolbar' style='margin-top:0;'>
+			<el-form :inline="true">
+				<el-form-item label='请求时间：'>
+					<el-date-picker
+      					v-model="value1"
+      					type="daterange"
+      					range-separator="至"
+      					start-placeholder="开始日期"
+      					end-placeholder="结束日期"
+      					@change="selectValue1">
+    				</el-date-picker>
+				</el-form-item>
+				
+				<el-form-item label='业务系统：' style=''>
+					<el-select v-model="value2" placeholder="业务系统" @change="selectValue2">
+    					<el-option :value="''">全部</el-option>
+    					<el-option
+      						v-for="item in yewu"
+      						:key="item.id"
+      						:label="item.appname"
+      						:value="item.appname">
+    					</el-option>
+  					</el-select>
+				</el-form-item>
+				
+				<el-form-item label='接口状态：' style=''>
+					<el-select v-model="value3" placeholder="接口状态" @change="selectValue3">
+    					<el-option :value="''">全部</el-option> 
+    					<el-option value="1,2" label='正常'>正常</el-option>
+    					<el-option value="0" label='异常'>异常</el-option>    					
+  					</el-select>
+				</el-form-item>
+			</el-form>
+	</el-col>
+	<el-table :data="list" highlight-current-row border :loading="listLoading" style="width: 100%;">
+			<el-table-column type="index" width="60" align='center'></el-table-column>
+			<el-table-column prop="tm" label="请求时间" sortable align='center'></el-table-column>
+			<el-table-column prop="servicename" label="接口名称" align='center'></el-table-column>
+			<el-table-column prop="appname" label="请求者" align='center'></el-table-column>
+			<el-table-column prop="res_status" label="响应状态" align='center'>
+				<template scope="scope">
+              		<span v-if="(scope.row.res_status === '0')">
+             	 		<div style="position: absolute;top:50%;left:37%;margin-top:-5px;width: 10px;height: 10px;border-radius: 50%;background: rgb(235, 51, 46);"></div>
+                		<span>异常</span>
+              		</span>
+              		<span v-else>
+              			<div style="position: absolute;top:50%;left:37%;margin-top:-5px;width: 10px;height: 10px;border-radius: 50%;background: rgb(22, 132, 231);"></div>
+                		<span>正常</span>
+              		</span>
+            	</template>
+			</el-table-column>
+			<el-table-column prop="consume" label="耗时" align='center'>
+				<template scope="scope">
+              		<div>{{scope.row.consume}}ms</div>
+            	</template>
+			</el-table-column>
+	</el-table>
+</div>

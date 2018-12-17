@@ -1,0 +1,117 @@
+<div>
+	<el-col :span='24' class='toolbar'>
+			<el-form :inline="true">
+				<el-form-item>
+					<el-input v-model='search' placeholder="应用系统名称"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click='addVisible = true'>注册应用系统</el-button>
+				</el-form-item>
+			</el-form>
+		</el-col>
+	<el-table :data="tableData" highlight-current-row border @row-click='onRowClick' style="width: 100%;">
+			<el-table-column type="index" width="60" label="序号" align='center'>
+			</el-table-column>
+			<el-table-column prop="appname" label="应用系统名称" width="200" align='center' sortable>
+			</el-table-column>
+			<el-table-column prop="companyname" label="开发商" align='center'>
+			</el-table-column>
+			<el-table-column prop="url" label="访问地址" align='center'>
+			</el-table-column>
+			<el-table-column prop="ip" label="部署IP" width="140" align='center'>
+			</el-table-column>
+			<el-table-column prop="domain" label="域名" width="140" align='center'>
+			</el-table-column>
+			<el-table-column prop="account" label="账号" width="80" sortable align='center'>
+			</el-table-column>
+			<el-table-column prop="token" label="令牌" align='center'>
+			</el-table-column>
+			<el-table-column prop="remark" label="备注" align='center' width='80'>
+			</el-table-column>
+			<el-table-column label="操作" width="150" align='center'>
+				<template scope="scope">
+					<el-button size="small" @click="editVisible = true">编辑</el-button>
+					<el-button type="danger" size="small" @click="onDelete(scope.$index, scope.row)">删除</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+
+	<el-dialog :visible.sync='addVisible' title="注册应用系统" size='tiny' width='35%'>
+			<el-form :model="newApp" label-width="120px" :rules="rules" ref='addForm'>
+				<el-form-item label="应用系统名称" prop="appname">
+					<el-input v-model="newApp.appname" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="开发商" prop="companyid">
+					<el-select v-model="newApp.companyid" placeholder="请选择"  style="width:507px">
+					    <el-option
+					      v-for="item in options"
+					      :key="item.id"
+					      :label="item.companyname"
+					      :value="item.id">
+					    </el-option>
+					  </el-select>
+				</el-form-item>
+				<el-form-item label="访问地址" prop="url">
+					<el-input v-model="newApp.url" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="部署IP" prop="ip">
+					<el-input v-model="newApp.ip" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="域名" prop="domain">
+					<el-input v-model="newApp.domain" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="账号" prop="account">
+					<el-input v-model="newApp.account" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="密码" prop="password">
+					<el-input v-model="newApp.password" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="备注" prop="remark">
+					<el-input v-model="newApp.remark" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="onAddCancle">取消</el-button>
+				<el-button type="primary" @click.native="onAddApp">提交</el-button>
+			</div>
+	</el-dialog>
+	<el-dialog :visible.sync='editVisible' title="修改应用系统" size='tiny' width='35%'>
+			<el-form :model="currentApp" label-width="120px" :rules="rules" ref='editForm'>
+				<el-form-item label="应用系统名称" prop="appname">
+					<el-input v-model="currentApp.appname" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="开发商" prop="companyid">
+					<el-select v-model="currentApp.companyid" placeholder="请选择" style="width:507px">
+					    <el-option
+					      v-for="item in options"
+					      :key="item.id"
+					      :label="item.companyname"
+					      :value="item.id">
+					    </el-option>
+					  </el-select>
+				</el-form-item>
+				<el-form-item label="访问地址" prop="url">
+					<el-input v-model="currentApp.url" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="部署IP" prop="ip">
+					<el-input v-model="currentApp.ip" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="域名" prop="domain">
+					<el-input v-model="currentApp.domain" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="账号" prop="account">
+					<el-input v-model="currentApp.account" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="密码" prop="password">
+					<el-input v-model="currentApp.password" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="备注" prop="remark">
+					<el-input v-model="currentApp.remark" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="editVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="onEditApp">提交</el-button>
+			</div>
+	</el-dialog>
+</div>

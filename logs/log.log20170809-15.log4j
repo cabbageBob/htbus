@@ -1,0 +1,111 @@
+[htbus2.0] 2017-08-09 15:31:25  [ main:0 ] - [ ERROR ]  Error executing FreeMarker template
+FreeMarker template error:
+The following has evaluated to null or missing:
+==> table.dbremark  [in template "数据库说明书模板.xml" at line 888, column 20]
+
+----
+Tip: It's the step after the last dot that caused this error, not those before it.
+----
+Tip: If the failing expression is known to be legally refer to something that's sometimes null or missing, either specify a default value like myOptionalVar!myDefault, or use <#if myOptionalVar??>when-present<#else>when-missing</#if>. (These only cover the last step of the expression; to cover the whole expression, use parenthesis: (myOptionalVar.foo)!myDefault, (myOptionalVar.foo)??
+----
+
+----
+FTL stack trace ("~" means nesting-related):
+	- Failed at: ${table.dbremark}  [in template "数据库说明书模板.xml" at line 888, column 18]
+----
+
+Java stack trace (for programmers):
+----
+freemarker.core.InvalidReferenceException: [... Exception message was already printed; see it above ...]
+	at freemarker.core.InvalidReferenceException.getInstance(InvalidReferenceException.java:134)
+	at freemarker.core.EvalUtil.coerceModelToTextualCommon(EvalUtil.java:451)
+	at freemarker.core.EvalUtil.coerceModelToStringOrMarkup(EvalUtil.java:374)
+	at freemarker.core.DollarVariable.calculateInterpolatedStringOrMarkup(DollarVariable.java:96)
+	at freemarker.core.DollarVariable.accept(DollarVariable.java:59)
+	at freemarker.core.Environment.visit(Environment.java:363)
+	at freemarker.core.IteratorBlock$IterationContext.executedNestedContentForCollOrSeqListing(IteratorBlock.java:316)
+	at freemarker.core.IteratorBlock$IterationContext.executeNestedContent(IteratorBlock.java:272)
+	at freemarker.core.IteratorBlock$IterationContext.accept(IteratorBlock.java:243)
+	at freemarker.core.Environment.visitIteratorBlock(Environment.java:596)
+	at freemarker.core.IteratorBlock.acceptWithResult(IteratorBlock.java:108)
+	at freemarker.core.IteratorBlock.accept(IteratorBlock.java:94)
+	at freemarker.core.Environment.visit(Environment.java:327)
+	at freemarker.core.Environment.visit(Environment.java:333)
+	at freemarker.core.Environment.process(Environment.java:306)
+	at freemarker.template.Template.process(Template.java:386)
+	at htbus.util.FreeMakerUtil.createDoc(FreeMakerUtil.java:47)
+	at htbus.service.DataService.createDatabaseDicdoc(DataService.java:422)
+	at htbus.service.DataService.main(DataService.java:433)
+[htbus2.0] 2017-08-09 15:36:12  [ main:0 ] - [ ERROR ]  Error executing FreeMarker template
+FreeMarker template error:
+For "${...}" content: Expected a string or something automatically convertible to string (number, date or boolean), or "template output" , but this has evaluated to an extended_hash (LinkedHashMap wrapped into f.t.DefaultMapAdapter):
+==> field!  [in template "数据库说明书模板.xml" at line 1161, column 26]
+
+----
+FTL stack trace ("~" means nesting-related):
+	- Failed at: ${field!}  [in template "数据库说明书模板.xml" at line 1161, column 24]
+----
+
+Java stack trace (for programmers):
+----
+freemarker.core.NonStringOrTemplateOutputException: [... Exception message was already printed; see it above ...]
+	at freemarker.core.EvalUtil.coerceModelToTextualCommon(EvalUtil.java:492)
+	at freemarker.core.EvalUtil.coerceModelToStringOrMarkup(EvalUtil.java:374)
+	at freemarker.core.DollarVariable.calculateInterpolatedStringOrMarkup(DollarVariable.java:96)
+	at freemarker.core.DollarVariable.accept(DollarVariable.java:59)
+	at freemarker.core.Environment.visit(Environment.java:363)
+	at freemarker.core.IteratorBlock$IterationContext.executedNestedContentForCollOrSeqListing(IteratorBlock.java:316)
+	at freemarker.core.IteratorBlock$IterationContext.executeNestedContent(IteratorBlock.java:272)
+	at freemarker.core.IteratorBlock$IterationContext.accept(IteratorBlock.java:243)
+	at freemarker.core.Environment.visitIteratorBlock(Environment.java:596)
+	at freemarker.core.IteratorBlock.acceptWithResult(IteratorBlock.java:108)
+	at freemarker.core.IteratorBlock.accept(IteratorBlock.java:94)
+	at freemarker.core.Environment.visit(Environment.java:363)
+	at freemarker.core.IteratorBlock$IterationContext.executedNestedContentForCollOrSeqListing(IteratorBlock.java:316)
+	at freemarker.core.IteratorBlock$IterationContext.executeNestedContent(IteratorBlock.java:272)
+	at freemarker.core.IteratorBlock$IterationContext.accept(IteratorBlock.java:243)
+	at freemarker.core.Environment.visitIteratorBlock(Environment.java:596)
+	at freemarker.core.IteratorBlock.acceptWithResult(IteratorBlock.java:108)
+	at freemarker.core.IteratorBlock.accept(IteratorBlock.java:94)
+	at freemarker.core.Environment.visit(Environment.java:327)
+	at freemarker.core.Environment.visit(Environment.java:333)
+	at freemarker.core.Environment.process(Environment.java:306)
+	at freemarker.template.Template.process(Template.java:386)
+	at htbus.util.FreeMakerUtil.createDoc(FreeMakerUtil.java:47)
+	at htbus.service.DataService.createDatabaseDicdoc(DataService.java:422)
+	at htbus.service.DataService.main(DataService.java:433)
+[htbus2.0] 2017-10-25 15:51:37  [ main:2 ] - [ INFO ]  Unable to sendViaPost to url[http://api.qgj.cn/webapi/profile.asmx]
+java.net.ConnectException: Connection timed out: connect
+	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:579)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.commons.httpclient.protocol.ReflectionSocketFactory.createSocket(ReflectionSocketFactory.java:140)
+	at org.apache.commons.httpclient.protocol.DefaultProtocolSocketFactory.createSocket(DefaultProtocolSocketFactory.java:125)
+	at org.apache.commons.httpclient.HttpConnection.open(HttpConnection.java:707)
+	at org.apache.commons.httpclient.MultiThreadedHttpConnectionManager$HttpConnectionAdapter.open(MultiThreadedHttpConnectionManager.java:1361)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeWithRetry(HttpMethodDirector.java:387)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeMethod(HttpMethodDirector.java:171)
+	at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:397)
+	at org.apache.axis2.transport.http.AbstractHTTPSender.executeMethod(AbstractHTTPSender.java:621)
+	at org.apache.axis2.transport.http.HTTPSender.sendViaPost(HTTPSender.java:193)
+	at org.apache.axis2.transport.http.HTTPSender.send(HTTPSender.java:75)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.writeMessageWithCommons(CommonsHTTPTransportSender.java:404)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.invoke(CommonsHTTPTransportSender.java:231)
+	at org.apache.axis2.engine.AxisEngine.send(AxisEngine.java:443)
+	at org.apache.axis2.description.OutInAxisOperationClient.send(OutInAxisOperation.java:406)
+	at org.apache.axis2.description.OutInAxisOperationClient.executeImpl(OutInAxisOperation.java:229)
+	at org.apache.axis2.client.OperationClient.execute(OperationClient.java:165)
+	at org.apache.axis2.client.ServiceClient.sendReceive(ServiceClient.java:555)
+	at org.apache.axis2.client.ServiceClient.sendReceive(ServiceClient.java:531)
+	at htbus.util.WebServiceHelper.getResult(WebServiceHelper.java:77)
+	at htbus.util.WebServiceHelper.getResultByMethod(WebServiceHelper.java:99)
+	at htbus.service.Service.main(Service.java:738)

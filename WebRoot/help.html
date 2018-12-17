@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>数据及服务管理平台--服务调用说明</title>
+</head>
+<body>
+<xmp theme="united" style="display:none;">
+###概述
+> 　　数据及服务管理平台，集中管理数据库、数据字典、数据服务的一个平台。     
+ 　　所有信息化业务系统或应用程序都需在此平台提交数据资料信息、注册服务接口信息；同时平台可将服务接口作为一个共享资源提供给任何其他应用使用，平台负责授权认证及监控。   
+　　以下介绍如何调用平台授权的服务接口。
+
+###获取token及接口地址
+* 平台接口调用地址：http://10.33.13.8:8080
+* 获取token：点击左侧“获取应用令牌”菜单，弹出对话框，接口复制应用的token令牌
+* 获取接口path：点击左侧“数据服务资源目录”菜单，左侧列表出筛选出“已授权”的服务接口，找到要调用的接口数据行，查看Path信息，如/api/4/queryRain
+* 获取接口参数信息：点击数据行左侧的“+”号，展开服务接口详细信息，产看参数列表
+* 得到接口地址：http://10.33.13.8:8080/api/4/queryRain
+
+> 请在服务端请求上述得到的接口地址，需要在请求头中设置token值，所以请使用POST方式请求服务接口，以下介绍如何在C#代码和JAVA代码中调用接口并获得数据结果。
+
+###C Sharp
+
+* POST
+
+```csharp
+using (var client = new WebClient())
+{
+	client.Headers.Add("apptoken", "{your app token}");
+	
+    var params = new NameValueCollection();
+    params["TM1"] = "2017-9-14";
+    params["TM2"] = "2017-9-15";
+ 
+    var response = client.UploadValues("http://10.33.13.8/api/4/queryRain", params);
+ 
+    var responseString = Encoding.Default.GetString(response);
+}
+```
+
+###JAVA
+
+```java
+	public String sendPost(String url,Map<String,String> params,String token,String charset){
+		HttpClient httpClient = null;
+		HttpPost httpPost = null;
+		String result = null;
+		try{
+			httpClient = new DefaultHttpClient();
+			httpPost = new HttpPost(url);
+			httpPost.addHeader("token",token);
+			List<NameValuePair> list = new ArrayList<NameValuePair>();
+			Iterator iterator = params.entrySet().iterator();
+			while(iterator.hasNext()){
+				Entry<String,String> elem = (Entry<String, String>) iterator.next();
+				list.add(new BasicNameValuePair(elem.getKey(),elem.getValue()));
+			}
+			if(list.size() > 0){
+				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list,charset);
+				httpPost.setEntity(entity);
+			}
+			HttpResponse response = httpClient.execute(httpPost);
+			if(response != null){
+				HttpEntity resEntity = response.getEntity();
+				if(resEntity != null){
+					result = EntityUtils.toString(resEntity,charset);
+				}
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return result;
+	}
+    
+    public static void main(String[] args){
+    	Map<String,String> params = new HashMap<String,Object>();
+    	params.put("TM1","2017-9-14");
+    	params.put("TM2","2017-9-15);
+		String responseString = sendPost("http://10.33.13.8/api/4/queryRain",params,"{your app token}","utf-8");
+    }
+```
+
+</xmp>
+
+<script src="js/strapdown.js"></script>
+<script src="http://demo.htwater.net:8080/shanhong/libs/jquery/jquery-1.11.1.min.js"></script>
+<script>
+	var index = 1;
+	$("h3").each(function(a,b){
+		b.innerHTML = index+"、"+b.innerHTML;
+		index++;
+	});
+</script>
+</body>
+</html>

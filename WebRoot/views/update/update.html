@@ -1,0 +1,327 @@
+<div>
+	<el-col :span='24' class='toolbar' style='margin-top:0;'>
+			<el-form :inline="true">
+				<el-form-item label='检索：'>
+					<el-input style='width' v-model="value1" placeholder="接口名称/path" suffix-icon="el-icon-search" @change="selectValue"></el-input>
+				</el-form-item>
+				
+				<el-select v-model="value2" placeholder="所属业务系统" @change="selectValue">
+    				<el-option :value="null" label='全部'>全部</el-option>
+    				<el-option
+      					v-for="item in yewu"
+      					:key="item.id"
+      					:label="item.appname"
+      					:value="item.id">
+    				</el-option>
+  				</el-select>
+				
+				<el-form-item label='启用状态：'>
+					<el-select v-model="value3" placeholder="启用状态" @change="selectValue" style="width:120px;">
+    					<el-option :value="null" label='全部'>全部</el-option>
+    					<el-option value='1' label='启用'>启用</el-option>
+    					<el-option value="0" label='禁用'>禁用</el-option>
+  					</el-select>
+  				</el-form-item>
+  				
+  				<el-form-item label='缓存设置：'>
+					<el-select v-model="value4" placeholder="缓存" @change="selectValue" style="width:120px;">
+    					<el-option :value="null" label='全部'>全部</el-option>
+    					<el-option value='1' label='已设置'>已设置</el-option>
+    					<el-option value="0" label='未设置'>未设置</el-option>
+  					</el-select>
+  				</el-form-item>
+  				
+  				<el-form-item label='资源定绑状态：'>
+					<el-select v-model="value5" placeholder="绑定" @change="selectValue" style="width:120px;">
+    					<el-option :value="null" label='全部'>全部</el-option>
+    					<el-option value='1' label='已绑定'>已绑定</el-option>
+    					<el-option value="0" label='未绑定'>未绑定</el-option>
+  					</el-select>
+  				</el-form-item>
+  				
+  				<el-button type='primary' :disabled="duoxuan" @click='piliang'>批量绑定</el-button>
+			</el-form>
+	</el-col>
+	<el-table :data="list" highlight-current-row border :loading="listLoading" style="width: 100%;min-height:0px;max-height:610px;overflow:auto" @sort-change='paixu' @selection-change="handleSelectionChange">>
+			<el-table-column type="selection" width="40" align='center'></el-table-column>
+			<el-table-column type="expand">
+      			<template scope="props">
+        			<el-form label-position="left">
+        				<h5 style="font-size: 15px; color: rgb(34, 150, 255); margin: 15px 0px;">接口发布信息</h5>
+            			<p style='margin: 0 0;'>接口名称：{{ props.row.servicename }}</p>
+          				<p style='margin: 0 0;'>接口地址：{{ props.row.path }}</p>
+          				<p style='margin: 0 0;'>接口说明：{{ props.row.remark }}</p>
+          				<p style='margin: 0 0;'>请求方式：{{ props.row.request_type }}</p>
+          				<p style='margin: 0 0;'>当前版本：
+          					<span v-if="(props.row.current_version > 1)">
+								<el-button type="text" size="small" @click="edition(props.$index, props.row)" style='font-size:14px;'>
+								版本-{{props.row.current_version}}
+								</el-button>
+							</span>
+							<span v-else>版本-{{props.row.current_version}}</span>
+						</p>
+          				<!-- <p style='margin: 0 0;'>申请审批状态：
+          					<span v-if="( props.row.askstatus == '1')">已授权</span>
+          					<span v-else-if="( props.row.askstatus == '2')">待审批</span>
+          					<span v-else>待申请</span>
+          				</p> -->
+          				<div style='width:80%'>
+          					<p style='margin: 0 0;'>请求参数：</p>
+          					<div style='margin-left:55px;'>
+								<el-table :data="props.row.params" border highlight-current-row :loading="listLoading" style="width: 100%;min-height:0px;">
+									<el-table-column prop="param" label="参数名" align='center'></el-table-column>
+									<el-table-column prop="param_remark" label="参数说明" align='center'></el-table-column>
+									<el-table-column prop="param_type" label="取值类型" align='center'></el-table-column>
+									<el-table-column prop="param_sample" label="取值示例" align='center'></el-table-column>
+								</el-table>
+							</div>
+          				</div>
+          				<p style='margin: 0 0;'>响应格式：{{ props.row.response_type }}</p>
+          				<div style='width:80%'>
+          					<p style='margin: 0 0;'>响应示例：</p>
+          					<div style="margin-left: 55px; padding: 15px; background: rgb(249, 243, 225);">
+          						<pre>{{ props.row.response_sample }}</pre>
+          					</div>
+          				</div>
+          				<p style='margin: 0 0;'>缓存有效期：{{ props.row.cache_effective }}分钟</p>
+          				<p style='margin: 0 0;'>备注：{{ props.row.remark }}</p>
+          				<h5 style="font-size: 15px; color: rgb(34, 150, 255); margin: 15px 0px;">接口来源信息</h5>
+          				<p style='margin: 0 0;'>注册时间：{{ props.row.regtm }}</p>
+          				<p style='margin: 0 0;'>来源应用：{{ props.row.appname }}</p>
+          				<div>
+          					服务地址：{{ props.row.from_url }}
+          				</div>
+          				<p style='margin: 0 0;'>请求方式：{{ props.row.from_request_type }}</p>
+        			</el-form>
+      			</template>
+    		</el-table-column>
+    		<!-- <el-table-column type="selection" width="55"> </el-table-column> -->
+			<el-table-column type="index" width="60" align='center'></el-table-column>
+			<el-table-column prop="servicename" label="接口名称" align='center'>
+				<template scope='scope'>
+					<span>
+						<el-button type="text" size="small" @click="intf(scope.$index, scope.row)" style='font-size:14px;'>
+							{{scope.row.servicename}}
+						</el-button>
+					</span>
+				</template>
+			</el-table-column>
+			<!-- <el-table-column prop="current_version" label="当前版本" align='center' width='100'>
+				<template scope='scope'>
+					<span v-if="(scope.row.current_version > 1)">
+						<el-button type="text" size="small" @click="edition(scope.$index, scope.row)" style='font-size:14px;'>
+							版本-{{scope.row.current_version}}
+						</el-button>
+					</span>
+					<span v-else>版本-{{scope.row.current_version}}</span>
+				</template>
+			</el-table-column> -->
+			<!-- <el-table-column prop="path" label="发布方法名" align='center'></el-table-column> -->
+			<!-- <el-table-column prop="appname" label="业务系统" align='center'></el-table-column> -->
+			<el-table-column prop="res_status" label="接口状态" align='center' width='200'>
+				<template scope="scope">
+              		<span v-if="(scope.row.res_status === '1')">
+                		<div style="position: absolute;top:50%;left:30%;margin-top:-6px;width: 10px;height: 10px;border-radius: 50%;background: rgb(22, 132, 231);"></div>
+                		<span>正常</span>
+              		</span>
+              		<span v-else-if="(scope.row.res_status === '0')">
+             	 		<div style="position: absolute;top:50%;left:30%;margin-top:-6px;width: 10px;height: 10px;border-radius: 50%;background: rgb(235, 51, 46);"></div>
+                		<span>异常</span>
+              		</span>
+              		<span v-else>
+              			<div style="position: absolute;top:50%;left:30%;margin-top:-6px;width: 10px;height: 10px;border-radius: 50%;background: #000;"></div>
+                		<span>未知</span>
+              		</span>
+            	</template>
+			</el-table-column>
+			<el-table-column prop="berequest_count" label="调用次数" sortable='custom' align='center' width='140'></el-table-column>
+			<el-table-column prop="cache_effective" label="缓存有效期" align='center' width='200'>
+				<template scope='scope'>
+					<span>
+						<el-button type="text" size="small" @click="cache(scope.$index, scope.row)" style='font-size:14px;'>
+							{{scope.row.cache_effective}}分钟
+						</el-button>
+					</span>
+				</template>
+			</el-table-column>
+			<el-table-column prop="onoff" label="启用状态" align='center' width='200'>
+				<template scope='scope'>
+					<span v-if="(scope.row.onoff === 1)" style='color:rgb(34, 150, 255)'>已启用</span>
+					<span v-else="(scope.row.onoff === 0)">未启用</span>
+				</template>
+			</el-table-column>
+			<el-table-column prop="class" label="绑定资源" align='center' width='200'></el-table-column>
+			<el-table-column prop="onoff" label="操作" align='center' width='200'>
+				<template scope="scope">
+              		<span v-if="(scope.row.onoff == '1')">
+                		<el-button type='text' size="mini" style='color:red' @click='qiting(0,scope.row)'>停用</el-button>
+              		</span>
+              		<span v-else="(scope.row.onoff =='0')">
+                		<el-button type='text' size="mini" @click='qiting(1,scope.row)'>启用</el-button>
+              		</span>
+              		<span style='margin-left:10px;'>
+              			<el-button type='text' size="mini" @click='test(scope.$index,scope.row)'>测试</el-button>
+              		</span>
+              		<span style='margin-left:10px;'>
+              			<el-button type='text' size="mini" @click='bind(scope.$index,scope.row)'>绑定</el-button>
+              		</span>
+            	</template>
+			</el-table-column>
+	</el-table>
+	
+	<el-dialog title="缓存设置" :visible.sync="cacheModel" :close-on-click-modal="false" width="35%">
+			<el-form label-width="100px;">
+				<el-form-item label="缓存有效期：" style='margin-bottom:0px;'>
+					<el-input v-model="cachetime" style='width:80%'>
+						<template slot="append">分钟</template>
+					</el-input>
+					<span style='color:rgba(0,0,0,.43);margin-left:100px;'>默认为0即为不缓存，如果大于0则平台会对每次请求结果按有效期值进行缓存</span>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button type="primary" @click.native="cacheSubmit">保存</el-button>
+			</div>
+	</el-dialog>
+	
+	<el-dialog title="历史版本号" :visible.sync="editionModel" :close-on-click-modal="false" width="50%">
+		<el-form style='height:600px;overflow:auto'>
+			<div style='float:left;width:15%'>
+	    		<div style='border-right: 1px solid #e6ebf5;height:100%'>
+  					<el-menu @select='handleselect' :default-active='1'>
+  						<el-menu-item v-for="item in menuList" :index='item.indexId' style='margin:5px 0;'>{{item.name}}</el-menu-item>
+          			</el-menu>
+				</div>      
+  			</div>
+  			<div style='float:right;width:84%;'>
+  				<el-form label-position="left">
+        			<h5 style="font-size: 15px; color: rgb(34, 150, 255); margin: 15px 0px;">接口发布信息</h5>
+            		<p style='margin: 0 0;'>接口名称：{{ editionList.servicename }}</p>
+          			<p style='margin: 0 0;'>接口地址：{{ editionList.path }}</p>
+          			<p style='margin: 0 0;'>接口说明：{{ editionList.remark }}</p>
+          			<p style='margin: 0 0;'>请求方式：{{ editionList.request_type }}</p>
+          				<!-- <p style='margin: 0 0;'>申请审批状态：
+          					<span v-if="( props.row.askstatus == '1')">已授权</span>
+          					<span v-else-if="( props.row.askstatus == '2')">待审批</span>
+          					<span v-else>待申请</span>
+          				</p> -->
+          			<div style='width:80%'>
+          				<p style='margin: 0 0;'>请求参数：</p>
+          				<div style='margin-left:55px;'>
+							<el-table :data="editionList.params" border highlight-current-row :loading="listLoading" style="width: 100%;min-height:0px;">
+								<el-table-column prop="param" label="参数名" align='center'></el-table-column>
+								<el-table-column prop="param_remark" label="参数说明" align='center'></el-table-column>
+								<el-table-column prop="param_type" label="取值类型" align='center'></el-table-column>
+								<el-table-column prop="param_sample" label="取值示例" align='center'></el-table-column>
+							</el-table>
+						</div>
+          			</div>
+          			<p style='margin: 0 0;'>响应格式：{{ editionList.response_type }}</p>
+          			<div style='width:80%'>
+          				<p style='margin: 0 0;'>响应示例：</p>
+          				<div style="margin-left: 55px; padding: 15px; background: rgb(249, 243, 225);">
+          					<pre>{{ editionList.response_sample }}</pre>
+          				</div>
+          			</div>
+          			<p style='margin: 0 0;'>缓存有效期：{{ editionList.cache_effective }}分钟</p>
+          			<h5 style="font-size: 15px; color: rgb(34, 150, 255); margin: 15px 0px;">接口来源信息</h5>
+          			<p style='margin: 0 0;'>注册时间：{{ editionList.regtm }}</p>
+          			<p style='margin: 0 0;'>来源应用：{{ editionList.appname }}</p>
+          			<div>
+          				服务地址：{{ editionList.from_url }}
+          			</div>
+          			<p style='margin: 0 0;'>请求方式：{{ editionList.from_request_type }}</p>
+        		</el-form>
+  			</div>
+  		</el-form>
+	</el-dialog>
+	
+	<el-dialog :title="'服务接口详情-'+this.name" :visible.sync="intfModel" :close-on-click-modal="false" width="35%">
+			<el-form label-width="100px;">
+				<el-tabs v-model="activeName">
+    				<el-tab-pane label="授权情况" name="first">
+    					<el-table :data="intfData1" highlight-current-row :loading="listLoading" style="width: 100%;min-height:0px;">
+							<el-table-column type="index" label='#' width="55"></el-table-column>
+							<el-table-column prop="appname" label="应用名称"></el-table-column>
+						</el-table>
+    				</el-tab-pane>
+    				<el-tab-pane label="24小时调用情况" name="second">
+						<el-table :data="intfData2" highlight-current-row :loading="listLoading" style="width: 100%;min-height:0px;">
+							<el-table-column type="index" label='#' width="55"></el-table-column>
+							<el-table-column prop="tm" label="请求时间"></el-table-column>
+							<el-table-column prop="servicename" label="接口名称"></el-table-column>
+							<el-table-column prop="appname" label="请求者"></el-table-column>
+							<el-table-column prop="res_status" label="响应状态"></el-table-column>
+							<el-table-column prop="consume" label="耗时"></el-table-column>
+						</el-table>
+					</el-tab-pane>
+    			</el-tabs>
+			</el-form>
+	</el-dialog>
+	
+	<el-dialog :title="'接口测试-'+this.testData.servicename" :visible.sync="testModel" :close-on-click-modal="false" width="35%" @close="getList1()">
+			<el-form label-width="150px">
+				<el-form-item label="参数设置：" style='margin-bottom:10px;font-size:14px;'>
+				</el-form-item>
+				<el-form-item v-for="item in testData.params" :label="item.param+'('+item.param_remark+')'" style='margin-bottom:0px;'>
+					<el-input v-model="item.param_sample" style='width:350px' size='mini'></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-button type='primary' size='mini' style="margin-top:10px;" @click="testBtn">点击测试</el-button>
+				</el-form-item>
+				<el-form-item label="信息：">
+    				<div style='background-color:#f7f3e1;width:350px;height:300px;overflow:auto'>
+    					<div style='color:#5a5e66;margin-left:20px;margin-top:10px;'>{{message.response}}</div>
+    				</div>
+				</el-form-item>	
+			</el-form>
+	</el-dialog>
+	
+	<el-dialog :title="'绑定-'+this.testData.servicename" :visible.sync="bindModel" :close-on-click-modal="false" width="35%">
+			<el-form label-width="150px" style='height:550px;overflow:auto;'>
+				<el-tree :props="props" :data="treeData" show-checkbox node-key='code' ref="tree" default-expand-all 
+					:default-checked-keys="[this.bindData]" @check-change="handleCheckChange">
+				</el-tree>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="bindModel = false;">取消</el-button>
+				<el-button type="primary" @click.native="bindBtn">绑定</el-button>
+			</div>
+	</el-dialog>
+	
+	<el-dialog title="批量绑定" :visible.sync="plModel" :close-on-click-modal="false" width="35%">
+			<el-form label-width="150px" style='height:550px;overflow:auto;'>
+				<el-tree :props="props" :data="treeData" show-checkbox node-key='code' ref="tree2" default-expand-all 
+					@check-change="handleCheckChange2">
+				</el-tree>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="plModel = false;">取消</el-button>
+				<el-button type="primary" @click.native="plBtn">绑定</el-button>
+			</div>
+	</el-dialog>
+	
+	<el-dialog title="启停确认" :visible.sync="qtModel" :close-on-click-modal="false" width="35%">
+			<el-form style='text-align:center'>
+				你确定要 
+				<span v-if='this.qtDataT=="1"' style='color:red;margin:0 10px;'>启用</span> 
+				<span v-else='this.qtDataT=="0"' style='color:red;margin:0 10px;'>停用</span>
+				接口：{{this.qtData.servicename}}
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="qtModel = false;">取消</el-button>
+				<el-button type="primary" @click.native="qitingBtn">确定</el-button>
+			</div>
+	</el-dialog>
+	
+	<el-col :span='24' class='' style='margin-top:0;'>
+		<el-form :inline="true" style='text-align:center'>
+			<el-form-item :label="'共'+this.listFy.total+'条'">
+    			<el-pagination style='margin-top:4px;' @size-change="handleSizeChange"
+      				@current-change="handleCurrentChange" current-page.sync="1" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="sizes, prev, pager, next" :total="this.listFy.total">
+    			</el-pagination>
+			</el-form-item>
+		</el-form>
+	</el-col>
+	
+	
+</div>

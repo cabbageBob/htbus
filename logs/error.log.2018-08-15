@@ -1,0 +1,76 @@
+[htbus2.0] 2017-08-09 15:31:25  [ main:0 ] - [ ERROR ]  Error executing FreeMarker template
+FreeMarker template error:
+The following has evaluated to null or missing:
+==> table.dbremark  [in template "数据库说明书模板.xml" at line 888, column 20]
+
+----
+Tip: It's the step after the last dot that caused this error, not those before it.
+----
+Tip: If the failing expression is known to be legally refer to something that's sometimes null or missing, either specify a default value like myOptionalVar!myDefault, or use <#if myOptionalVar??>when-present<#else>when-missing</#if>. (These only cover the last step of the expression; to cover the whole expression, use parenthesis: (myOptionalVar.foo)!myDefault, (myOptionalVar.foo)??
+----
+
+----
+FTL stack trace ("~" means nesting-related):
+	- Failed at: ${table.dbremark}  [in template "数据库说明书模板.xml" at line 888, column 18]
+----
+
+Java stack trace (for programmers):
+----
+freemarker.core.InvalidReferenceException: [... Exception message was already printed; see it above ...]
+	at freemarker.core.InvalidReferenceException.getInstance(InvalidReferenceException.java:134)
+	at freemarker.core.EvalUtil.coerceModelToTextualCommon(EvalUtil.java:451)
+	at freemarker.core.EvalUtil.coerceModelToStringOrMarkup(EvalUtil.java:374)
+	at freemarker.core.DollarVariable.calculateInterpolatedStringOrMarkup(DollarVariable.java:96)
+	at freemarker.core.DollarVariable.accept(DollarVariable.java:59)
+	at freemarker.core.Environment.visit(Environment.java:363)
+	at freemarker.core.IteratorBlock$IterationContext.executedNestedContentForCollOrSeqListing(IteratorBlock.java:316)
+	at freemarker.core.IteratorBlock$IterationContext.executeNestedContent(IteratorBlock.java:272)
+	at freemarker.core.IteratorBlock$IterationContext.accept(IteratorBlock.java:243)
+	at freemarker.core.Environment.visitIteratorBlock(Environment.java:596)
+	at freemarker.core.IteratorBlock.acceptWithResult(IteratorBlock.java:108)
+	at freemarker.core.IteratorBlock.accept(IteratorBlock.java:94)
+	at freemarker.core.Environment.visit(Environment.java:327)
+	at freemarker.core.Environment.visit(Environment.java:333)
+	at freemarker.core.Environment.process(Environment.java:306)
+	at freemarker.template.Template.process(Template.java:386)
+	at htbus.util.FreeMakerUtil.createDoc(FreeMakerUtil.java:47)
+	at htbus.service.DataService.createDatabaseDicdoc(DataService.java:422)
+	at htbus.service.DataService.main(DataService.java:433)
+[htbus2.0] 2017-08-09 15:36:12  [ main:0 ] - [ ERROR ]  Error executing FreeMarker template
+FreeMarker template error:
+For "${...}" content: Expected a string or something automatically convertible to string (number, date or boolean), or "template output" , but this has evaluated to an extended_hash (LinkedHashMap wrapped into f.t.DefaultMapAdapter):
+==> field!  [in template "数据库说明书模板.xml" at line 1161, column 26]
+
+----
+FTL stack trace ("~" means nesting-related):
+	- Failed at: ${field!}  [in template "数据库说明书模板.xml" at line 1161, column 24]
+----
+
+Java stack trace (for programmers):
+----
+freemarker.core.NonStringOrTemplateOutputException: [... Exception message was already printed; see it above ...]
+	at freemarker.core.EvalUtil.coerceModelToTextualCommon(EvalUtil.java:492)
+	at freemarker.core.EvalUtil.coerceModelToStringOrMarkup(EvalUtil.java:374)
+	at freemarker.core.DollarVariable.calculateInterpolatedStringOrMarkup(DollarVariable.java:96)
+	at freemarker.core.DollarVariable.accept(DollarVariable.java:59)
+	at freemarker.core.Environment.visit(Environment.java:363)
+	at freemarker.core.IteratorBlock$IterationContext.executedNestedContentForCollOrSeqListing(IteratorBlock.java:316)
+	at freemarker.core.IteratorBlock$IterationContext.executeNestedContent(IteratorBlock.java:272)
+	at freemarker.core.IteratorBlock$IterationContext.accept(IteratorBlock.java:243)
+	at freemarker.core.Environment.visitIteratorBlock(Environment.java:596)
+	at freemarker.core.IteratorBlock.acceptWithResult(IteratorBlock.java:108)
+	at freemarker.core.IteratorBlock.accept(IteratorBlock.java:94)
+	at freemarker.core.Environment.visit(Environment.java:363)
+	at freemarker.core.IteratorBlock$IterationContext.executedNestedContentForCollOrSeqListing(IteratorBlock.java:316)
+	at freemarker.core.IteratorBlock$IterationContext.executeNestedContent(IteratorBlock.java:272)
+	at freemarker.core.IteratorBlock$IterationContext.accept(IteratorBlock.java:243)
+	at freemarker.core.Environment.visitIteratorBlock(Environment.java:596)
+	at freemarker.core.IteratorBlock.acceptWithResult(IteratorBlock.java:108)
+	at freemarker.core.IteratorBlock.accept(IteratorBlock.java:94)
+	at freemarker.core.Environment.visit(Environment.java:327)
+	at freemarker.core.Environment.visit(Environment.java:333)
+	at freemarker.core.Environment.process(Environment.java:306)
+	at freemarker.template.Template.process(Template.java:386)
+	at htbus.util.FreeMakerUtil.createDoc(FreeMakerUtil.java:47)
+	at htbus.service.DataService.createDatabaseDicdoc(DataService.java:422)
+	at htbus.service.DataService.main(DataService.java:433)

@@ -1,0 +1,63 @@
+<div>
+	<el-col :span='24' class='tipbar'>
+			注意：现在已经入梅<span style="margin:0 3px;font-weight:bold;color:blue;">{{days}}</span>天。
+	</el-col>
+	<el-col :span='24' class='toolbar' style='margin-top:0;'>
+			<el-form :inline="true">
+				<el-form-item label='年份筛选'>
+					<el-date-picker v-model="filter.year" type="year" placeholder="选择年份"></el-date-picker>
+				</el-form-item>
+				
+				<el-form-item style='float:right;'>
+					<el-button type="primary" @click="handleAdd">添加入梅时间</el-button>
+				</el-form-item>
+			</el-form>
+	</el-col>
+	<el-table :data="list" highlight-current-row :loading="listLoading" style="width: 100%;">
+			<el-table-column type="selection" width="55"></el-table-column>
+			<el-table-column type="index" width="60"></el-table-column>
+			<el-table-column prop="NIAN" label="年份" sortable align='center'></el-table-column>
+			<el-table-column prop="TM1" label="开始时间" align='center'></el-table-column>
+			<el-table-column prop="TM2" label="结束时间" align='center'></el-table-column>
+			<el-table-column label="操作" width="150" align='center'>
+				<template scope="scope">
+					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+				</template>
+			</el-table-column>
+	</el-table>
+	<el-dialog title="编辑入梅时间" v-model="editFormVisible" :close-on-click-modal="false" size='tiny'>
+			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+				<el-form-item label="年份" prop="NIAN" :disabled="true">
+					<el-input v-model="editForm.NIAN" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="开始时间" prop="TM1">
+					<el-input v-model="editForm.TM1" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="结束时间" prop="TM2">
+					<el-input v-model="editForm.TM2" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="editSubmit">提交</el-button>
+			</div>
+	</el-dialog>
+	<el-dialog title="添加入梅时间" v-model="addFormVisible" :close-on-click-modal="false" size='tiny'>
+			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+				<el-form-item label="年份" prop="NIAN">
+					<el-input v-model="addForm.NIAN" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="开始时间" prop="TM1">
+					<el-input v-model="addForm.TM1" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="结束时间" prop="TM2">
+					<el-input v-model="addForm.TM2" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="addFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="addSubmit">提交</el-button>
+			</div>
+	</el-dialog>
+</div>

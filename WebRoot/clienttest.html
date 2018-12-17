@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>客户端调用DEMO</title>
+</head>
+<body>
+appname:海塘标化<br>
+apptoken:73cd4be7ffb44ece90fc454eb430ff44<br>
+http://10.33.13.8:8080/bus/api/9/<input id="method" value='getUnit'>?<input id="param" value="rescd=qgj"><button>查询</button>
+<script type="text/javascript" src="vendors/jquery/jquery-1.11.1.min.js"></script>
+<script>
+$.ajaxSetup({
+	beforeSend: function(xhr){
+		xhr.setRequestHeader('apptoken', '73cd4be7ffb44ece90fc454eb430ff44');
+	}
+});
+$(function(){
+	$('button').on('click',function(){
+		$.getJSON("http://10.33.13.8:8080/bus/api/9/"+method.value+"?"+param.value,function(json){
+			console.info(json);
+		});
+		/*$.ajax({
+		    url: "http://localhost:8083/htbus/api/4/searchSLGCByName?name=z",
+		    type: "GET",
+		    crossDomain: true,
+		    success: function(json) {
+		    	console.info(json);
+		    }
+		});*/
+	});
+});
+</script>
+</body>
+</html>

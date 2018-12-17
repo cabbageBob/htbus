@@ -1,0 +1,44 @@
+<div>
+	<el-col :span='24' class='toolbar'>
+			<el-form :inline="true">
+				<el-form-item>
+					<el-button type="primary" @click='addVisible = true'>添加角色</el-button>
+				</el-form-item>
+			</el-form>
+		</el-col>
+	<el-table :data="tableData" highlight-current-row style="width: 100%;" @row-click='onRowClick'>
+			<el-table-column type="index" width="60">
+			</el-table-column>
+			<el-table-column prop="rolename" label="角色名称" min-width="100" sortable>
+			</el-table-column>
+			<el-table-column label="操作" width="150">
+				<template scope="scope">
+					<el-button size="small" @click="editVisible = true">编辑</el-button>
+					<el-button type="danger" size="small" @click="onDeleteRole(scope.$index, scope.row)">删除</el-button>
+				</template>
+			</el-table-column>
+	</el-table>
+	
+	<el-dialog :visible.sync='addVisible' title="添加角色" size='tiny'>
+			<el-form :model="newModel" label-width="120px" :rules="rules" ref='addForm'>
+				<el-form-item label="角色名称" prop="rolename">
+					<el-input v-model="newModel.rolename" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="onAddCancle">取消</el-button>
+				<el-button type="primary" @click.native="onAddRole">提交</el-button>
+			</div>
+	</el-dialog>
+	<el-dialog :visible.sync='editVisible' title="修改角色" size='tiny'>
+			<el-form :model="currentRow" label-width="120px" :rules="rules" ref='editForm'>
+				<el-form-item label="角色名称" prop="rolename">
+					<el-input v-model="currentRow.rolename" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="editVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="onEditRole">提交</el-button>
+			</div>
+	</el-dialog>
+</div>

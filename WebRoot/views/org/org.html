@@ -1,0 +1,174 @@
+<div id='div-org' style='display:flex;'>
+	<el-card class="box-card" style='flex:0 0 300px;margin:10px 16px 0 0;box-shadow:none;'>
+	  <div slot="header" class="clearfix">
+	    组织机构树
+	    <el-button class='tree_buttons' style="float: right;" type="text" @click='isTreeEditing = !isTreeEditing'>
+		{{isTreeEditing?'完成':'编辑'}}
+		</el-button>
+	  </div>
+	  <div v-if="isTreeEditing" style='margin:-10px 0 10px 0;'>
+	  		<el-button class='tree_buttons' type="text" @click='onEditTree("addOrg")'>添加</el-button>
+	  		<el-button class='tree_buttons' type="text" @click='onEditTree("delOrg")'>删除</el-button>
+	  		<el-button class='tree_buttons' type="text" @click='onEditTree("editOrg")'>修改</el-button>
+	  		<el-button class='tree_buttons' type="text" @click='onEditTree("upOrg")' :disabled="!up">上移</el-button>
+	  		<el-button class='tree_buttons' type="text" @click='onEditTree("downOrg")' :disabled='!down'>下移</el-button>
+	  </div>
+	  <el-tree ref="tree" :default-expanded-keys="[currentNode.data.id]" :current-node-key="currentNode.data.id"
+	  :data="treedata" :props="treeprops" node-key="id" accordion highlight-current @node-click="onNodeClick" style='border:none;'></el-tree>
+	</el-card>
+	<div style='flex:1;'>
+		<el-col :span='24' class='toolbar'>
+			<el-form :inline="true">
+				<el-form-item label='检索：'>
+					<el-input v-model="search" placeholder="编号/姓名"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="addVisible = true">添加人员</el-button>
+				</el-form-item>
+			</el-form>
+		</el-col>
+	<el-table :data="tableData" highlight-current-row :loading="listLoading" @row-click="onRowClick" style="width: 100%;" height='500'>
+			<el-table-column type="index" width="60">
+			</el-table-column>
+			<el-table-column prop="uid" label="ID" width="90" sortable>
+			</el-table-column>
+			<el-table-column prop="name" label="姓名" width="90" sortable>
+			</el-table-column>
+			<el-table-column prop="sex" label="性别" width="90" sortable>
+			</el-table-column>
+			<el-table-column prop="postname" label="岗位" width="90" sortable></el-table-column>
+			<el-table-column prop="rolename" label="角色" width="90" sortable></el-table-column>
+			<el-table-column prop="tel" label="办公电话" width="150" sortable>
+			</el-table-column>
+			<el-table-column prop="mobile" label="手机号" width="125" sortable>
+			</el-table-column>
+			<el-table-column prop="smobile" label="短号" min-width="80" sortable>
+			</el-table-column>
+			<el-table-column prop="mail" label="邮箱" min-width="80" sortable>
+			</el-table-column>
+			<el-table-column label="操作" width="150">
+				<template scope="scope">
+					<el-button size="small" @click="editVisible=true">编辑</el-button>
+					<el-button type="danger" size="small" @click="onDelPerson(scope.$index, scope.row)">删除</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+	</div>
+	
+	<el-dialog :visible.sync='addVisible' title="添加人员" size='tiny'>
+			<el-form :model="newPerson" label-width="120px" :rules="rules" ref='addPersonForm'>
+				<el-form-item label="用户ID" prop="uid">
+					<el-input v-model="newPerson.uid" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="姓名" prop=name>
+					<el-input v-model="newPerson.name" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="性别" prop="sex">
+				    <el-radio-group v-model="newPerson.sex">
+				      <el-radio label="男"></el-radio>
+				      <el-radio label="女"></el-radio>
+				    </el-radio-group>
+				  </el-form-item>
+				<el-form-item label="办公电话" prop="tel">
+					<el-input v-model="newPerson.tel" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="手机号码" prop="mobile">
+					<el-input v-model="newPerson.mobile" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="单位短号" prop="smobile">
+					<el-input v-model="newPerson.smobile" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="邮箱" prop="mail">
+					<el-input v-model="newPerson.mail" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="行政组织机构" prop="xingzheng">
+					<el-cascader :options="treedata[0]?treedata[0].children:[]" v-model='newPerson.xingzheng' :props="cascader" style='width:100%;'></el-cascader>
+				</el-form-item>
+				<el-form-item label="党组织机构" prop="dang">
+					<el-cascader :options="treedata[1]?treedata[1].children:[]" v-model='newPerson.dang' :props="cascader" style='width:100%;'></el-cascader>
+				</el-form-item>
+				<el-form-item label="岗位" prop="postid">
+					<el-select v-model="newPerson.postid" placeholder="请选择">
+					    <el-option
+					      v-for="item in options_post"
+					      :key="item.postid"
+					      :label="item.postname"
+					      :value="item.postid">
+					    </el-option>
+					  </el-select>
+				</el-form-item>
+				<el-form-item label="角色" prop="roleid">
+					<el-select v-model="newPerson.roleid" placeholder="请选择">
+					    <el-option
+					      v-for="item in options_role"
+					      :key="item.roleid"
+					      :label="item.rolename"
+					      :value="item.roleid">
+					    </el-option>
+					  </el-select>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="onAddCancel">取消</el-button>
+				<el-button type="primary" @click.native="onAddPerson">提交</el-button>
+			</div>
+	</el-dialog>
+	<el-dialog :visible.sync='editVisible' title="编辑人员" size='tiny'>
+			<el-form :model="editingPerson" label-width="120px" :rules="rules" ref='editPersonForm'>
+				<el-form-item label="用户ID" prop="uid">
+					<el-input v-model="editingPerson.uid" auto-complete="off" :disabled="true"></el-input>
+				</el-form-item>
+				<el-form-item label="姓名" prop=name>
+					<el-input v-model="editingPerson.name" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="性别" prop="sex">
+				    <el-radio-group v-model="editingPerson.sex">
+				      <el-radio label="男"></el-radio>
+				      <el-radio label="女"></el-radio>
+				    </el-radio-group>
+				  </el-form-item>
+				<el-form-item label="办公电话" prop="tel">
+					<el-input v-model="editingPerson.tel" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="手机号码" prop="mobile">
+					<el-input v-model="editingPerson.mobile" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="单位短号" prop="smobile">
+					<el-input v-model="editingPerson.smobile" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="邮箱" prop="mail">
+					<el-input v-model="editingPerson.mail" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="行政组织机构" prop="xingzheng">
+					<el-cascader :options="treedata[0]?treedata[0].children:[]" v-model='editingPerson.xingzheng' :props="cascader" style='width:100%;'></el-cascader>
+				</el-form-item>
+				<el-form-item label="党组织机构" prop="dang">
+					<el-cascader :options="treedata[1]?treedata[1].children:[]" v-model='editingPerson.dang' :props="cascader" style='width:100%;'></el-cascader>
+				</el-form-item>
+				<el-form-item label="岗位" prop="postid">
+					<el-select v-model="editingPerson.postid" placeholder="请选择">
+					    <el-option
+					      v-for="item in options_post"
+					      :key="item.postid"
+					      :label="item.postname"
+					      :value="item.postid">
+					    </el-option>
+					  </el-select>
+				</el-form-item>
+				<el-form-item label="角色" prop="roleid">
+					<el-select v-model="editingPerson.roleid" placeholder="请选择">
+					    <el-option
+					      v-for="item in options_role"
+					      :key="item.roleid"
+					      :label="item.rolename"
+					      :value="item.roleid">
+					    </el-option>
+					  </el-select>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editVisible=false">取消</el-button>
+				<el-button type="primary" @click.native="onEditPerson">提交</el-button>
+			</div>
+	</el-dialog>
+</div>

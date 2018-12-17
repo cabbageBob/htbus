@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<script src='./vendors/jquery/jquery-1.11.1.min.js'></script>
+<script src='./vendors/jquery/jquery.cookie.js'></script>
+<script>
+if(!$.cookie('token')){window.location.href="login.html"}
+</script>
+<title></title>
+<link rel="stylesheet" href="vendors/vue-element202/index.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<link rel="stylesheet" href="./css/main.css">
+<!--[if lt IE 9]>
+    <div class="alert alert-danger topframe" role="alert">您的浏览器
+        <strong>实在太旧了</strong>，请升级浏览器
+        <a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a>
+    </div>
+<![endif]-->
+<style>
+.el-table td, .el-table th{padding: 7px 0;}
+.table-header{
+line-height: 35px;
+    border: 1px solid #dfe6ec;
+    background-color: #eef1f6;
+    border-bottom: none;padding:0 10px;}
+.table-header .el-button--text{float: right;padding:0px;line-height:35px;}
+.el-table{min-height:400px;}
+</style>
+</head>
+<body>
+  <div id="app"></div>
+</body>
+  <!-- 先引入 Vue -->
+  <script src="vendors/vue/vue.min.js"></script>
+  <!-- 引入组件库 -->
+  <script src="vendors/vue-element202/index.js"></script>
+  <script src='./js/jsEx.js'></script>
+  <script src='./vendors/r/require.js' data-main="./main.js"></script>
+</html>

@@ -1,0 +1,47 @@
+<div>
+	<el-col :span='24' class='toolbar' style='margin-top:0;'>
+			<el-form :inline="true">
+				<el-form-item label='检索：'>
+					<el-input v-model="value1" placeholder="接口名称/path" suffix-icon="el-icon-search" @change="selectValue1"></el-input>
+				</el-form-item>
+				
+					<el-select v-model="value2" placeholder="服务提供者" @change="selectValue2">
+    					<el-option :value="''">全部</el-option>
+    					<el-option
+      						v-for="item in yewu"
+      						:key="item.id"
+      						:label="item.appname"
+      						:value="item.appname">
+    					</el-option>
+  					</el-select>
+				
+					<el-select v-model="value3" placeholder="处理状态" @change="selectValue3">
+    					<el-option :value="''">全部</el-option>
+    					<el-option value='0' label='未通过'>未通过</el-option>
+    					<el-option value="1" label='已授权'>已授权</el-option>
+    					<el-option value="-1" label='未处理'>未处理</el-option>    					
+  					</el-select>
+			</el-form>
+	</el-col>
+	<el-table :data="list" highlight-current-row :loading="listLoading" style="width: 100%;">
+			<el-table-column type="index" width="60"></el-table-column>
+			<el-table-column prop="servicename" label="接口名称" sortable align='center'></el-table-column>
+			<el-table-column prop="path" label="path" align='center'></el-table-column>
+			<el-table-column prop="from_appname" label="服务提供者" sortable align='center' width='200'></el-table-column>
+			<el-table-column prop="tm" label="申请时间" align='center'></el-table-column>
+			<el-table-column prop="dealtm" label="处理时间" sortable align='center'></el-table-column>
+			<el-table-column prop="result" label="处理状态" align='center'>
+				<template scope="scope">
+              		<span v-if="(scope.row.result == '1')">
+                		<span style="color:#2296ff">已授权</span>
+              		</span>
+              		<span v-else-if="(scope.row.result == '-1')">
+                		<span>未处理</span>
+              		</span>
+              		<span v-else>
+                		<span>未通过</span>
+              		</span>
+            	</template>
+			</el-table-column>
+	</el-table>
+</div>

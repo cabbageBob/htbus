@@ -1,0 +1,77 @@
+<div>
+	<el-col :span='24' class='toolbar' style='margin-top:0;'>
+			<el-form :inline="true">
+				<!-- <el-form-item label='检索：'>
+					<el-input v-model="value1" placeholder="接口名称" suffix-icon="el-icon-search"></el-input>
+				</el-form-item> -->
+				
+				<el-form-item label='业务系统：' style=''>
+					<el-select v-model="value2" placeholder="申请来源" @change="selectValue2">
+    					<el-option :value="''">全部</el-option>
+    					<el-option
+      						v-for="item in yewu"
+      						:key="item.id"
+      						:label="item.appname"
+      						:value="item.id">
+    					</el-option>
+  					</el-select>
+				</el-form-item>
+				
+				<el-form-item label='接口状态：' style=''>
+					<el-select v-model="value3" placeholder="审批状态" @change="selectValue3">
+    					<el-option :value="''">全部</el-option>
+    					<el-option value="0" label='拒绝'>拒绝</el-option>
+    					<el-option value="1" label='通过'>通过</el-option>
+    					<el-option value="-1" label='未处理'>未处理</el-option>
+  					</el-select>
+				</el-form-item>
+				<el-form-item>
+					<span v-if="this.multipleSelection == ''">
+						<el-button disabled>批量通过</el-button>
+						<el-button disabled>批量拒绝</el-button>
+					</span>
+					<span v-else>
+						<el-button type="primary" @click='toggleRowSelection'>批量通过</el-button>
+						<el-button type="primary" @click='failAsks'>批量拒绝</el-button>
+					</span>
+				</el-form-item>
+			</el-form>
+	</el-col>
+	<el-table :data="list" highlight-current-row border :loading="listLoading" style="width: 100%;" @selection-change="handleSelectionChange" ref="multipleTable">
+			<el-table-column type="expand" width="55">
+		      <template scope="props">
+		        <el-form label-position="left" style="word-break:break-all;">
+				 <el-form-item  label="服务接口说明：" style="width:100%;margin-bottom:0px;">
+				 	{{ props.row.remark }}
+				 </el-form-item>
+				 <el-form-item  label="服务提供者：" style="width:100%;margin-bottom:0px;">
+				 	{{ props.row.from_appname }}
+				 </el-form-item>
+				</el-form>
+		      </template>
+		    </el-table-column>
+		    <el-table-column type="selection" width="55" prop='uuid' :selectable='checkboxInit'></el-table-column>
+			<el-table-column type="index" width="60"></el-table-column>
+			<el-table-column prop="ask_appname" label="申请来源" align='center'></el-table-column>
+			<el-table-column prop="tm" label="申请时间" align='center'></el-table-column>
+			<el-table-column prop="servicename" label="接口名称" align='center'></el-table-column>
+			<el-table-column prop="path" label="接口path" align='center'></el-table-column>
+			<el-table-column prop="dealtm" label="审批时间" align='center'></el-table-column>
+			<el-table-column prop="result" label="审批" align='center'>
+				<template scope="scope">
+                	<span v-if="(scope.row.result == '1')">
+                		<el-button size='mini' type="info" plain disabled>已授权</el-button>
+              		</span>
+              		<span v-else-if="(scope.row.result == '0')">
+						<el-button size='mini' type="info" plain disabled>拒绝</el-button>
+              		</span>
+              		<span v-else="(scope.row.result == '-1')">
+						<el-button size='mini' type="primary" plain @click='dealpassAsk(scope.$index, scope.row)' style="margin-right: 10px;">通过</el-button>
+              			<el-button size='mini' type="danger" plain @click='dealfailAsk(scope.$index, scope.row)' style="margin-right: 10px;">拒绝</el-button>
+              		</span>
+            	</template>
+			</el-table-column>
+			
+	</el-table>
+	
+</div>

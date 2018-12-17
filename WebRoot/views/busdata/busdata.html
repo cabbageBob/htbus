@@ -1,0 +1,239 @@
+<div>
+<!-- 	<div style="margin-bottom: 20px;">
+  		<el-button size="small" @click="addTab(editableTabsValue2)">
+   		 add tab
+  		</el-button>
+	</div> -->
+	<el-tabs v-model="editableTabsValue" type="card">
+  		
+	</el-tabs>
+	<el-tabs v-model="editableTabsValue2" type="card" closable @tab-remove="removeTab" @tab-click='handleClick'>
+  		<el-tab-pane v-for="(item, index) in editableTabs" :key="item.name" :label="item.title" :name="item.name">
+  			<el-col :span='24' class='toolbar' style='margin-top:0;'>
+				<el-form :inline="true">
+					<el-form-item>
+						<el-input v-model="value1" placeholder="库名/名称" @change="selectValue1" suffix-icon="el-icon-search"></el-input>
+					</el-form-item>
+					<el-form-item style='float:right;'>
+						<el-button type="primary" @click="daochu">导出Excel</el-button>
+					</el-form-item>
+				</el-form>
+			</el-col>		
+			<el-table :data="list" border highlight-current-row :loading="listLoading" style="width: 100%;min-height:0px;" id='table1' >
+				<el-table-column prop="dbname" label="数据库名" align='center' width='200'>
+					<template scope="scope">
+						<div @click="addTab(scope.$index,scope.row)">{{scope.row.label}}</div>
+					</template>
+				</el-table-column>
+				<el-table-column prop="ip" label="IP" align='center' width='200'></el-table-column>
+				<el-table-column prop="port" label="端口" align='center' width='200'></el-table-column>
+				<el-table-column prop="dbtype" label="数据库类型" align='center'></el-table-column>
+				<el-table-column prop="caozuo" label="操作" align='center' width='250'>
+					<template scope="scope">
+              			<el-button plain type="primary" type="text" size="small" @click="edit(scope.$index, scope.row)">下载说明书</el-button>
+              			<!-- <el-button plain type="primary" size="small" @click="bind(scope.$index, scope.row)">绑定应用</el-button> -->
+            		</template>
+				</el-table-column>
+			</el-table>
+  		</el-tab-pane>
+  		
+  		<el-tab-pane v-for="(item, index) in editableTabs2" :key="item.name" :label="item.title" :name="item.name">
+    		<el-form :inline="true" style='width:48%;float:left'>
+    			<el-form-item style='margin-bottom:5px;'>数据表</el-form-item>
+    			<el-form-item style='float:right;width:100px;margin-bottom:5px;'>
+					<el-input size='mini' v-model="value2" placeholder="表名/名称" @change="selectValue2" suffix-icon="el-icon-search"></el-input>
+				</el-form-item>
+				<el-form-item style="width:90px;float:right;margin-bottom:5px;">
+					<el-select v-model="value3" @change="selectValue3" size="mini">
+    					<el-option value="0" label='全部'>全部</el-option>
+    					<el-option value='1' label='有名称'>有名称</el-option>
+    					<el-option value="2" label='无名称'>无名称</el-option>
+  					</el-select>
+  				</el-form-item>
+    			<el-form-item style='float:right;margin-bottom:5px;'>
+					<el-button type="primary" @click="daochu2" size="mini">导出Excel</el-button>
+				</el-form-item>
+				<el-table :data="list2" border highlight-current-row :loading="listLoading" style="width: 100%;" id='table2'>
+					<el-table-column prop="tbname" label="表名称" align='center' width='180'>
+						<template scope="scope">
+							<div @click="addfield(scope.$index,scope.row)">{{scope.row.tbname}}</div>
+						</template>
+					</el-table-column>
+					<el-table-column prop="label" label="名称" align='center'>
+						<template scope="scope">
+							<span v-if="(scope.row.label == null || scope.row.label == '')">
+								<el-button type="text" size="small" @click="editLabel2(scope.$index, scope.row)">-</el-button>
+							</span>
+							<span v-else>
+								<el-button type="text" size="small" @click="editLabel2(scope.$index, scope.row)">{{scope.row.label}}</el-button>
+							</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="remark" label="备注" align='center'>
+						<template scope="scope">
+							<span v-if="(scope.row.remark == null || scope.row.remark == '')">
+								<el-button type="text" size="small" @click="editRemark2(scope.$index, scope.row)">--</el-button>
+							</span>
+							<span v-else>
+								<el-button type="text" size="small" @click="editRemark2(scope.$index, scope.row)">{{scope.row.remark}}</el-button>
+							</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="sta" label="完整率" sortable align='center' width='100'>
+						<template scope="scope">
+              				{{scope.row.sta}}%
+            			</template>
+					</el-table-column>
+				</el-table>
+    		</el-form>
+    		
+    		<el-form :inline="true" style='width:51%;float:right'>
+    			<el-form-item style='margin-bottom:5px;'>字段</el-form-item>
+    			<el-form-item style='float:right;width:100px;margin-bottom:5px;'>
+					<el-input size='mini' v-model="value4" placeholder="字段名/名称" @change="selectValue4" suffix-icon="el-icon-search"></el-input>
+				</el-form-item>
+				<el-form-item style="width:90px;float:right;margin-bottom:5px;">
+					<el-select v-model="value5" @change="selectValue5" size="mini">
+    					<el-option value="0" label='全部'>全部</el-option>
+    					<el-option value='1' label='有名称'>有名称</el-option>
+    					<el-option value="2" label='无名称'>无名称</el-option>
+  					</el-select>
+  				</el-form-item>
+    			<el-form-item style='float:right;margin-bottom:5px;'>
+					<el-button type="primary" @click="daochu3" size="mini">导出Excel</el-button>
+				</el-form-item>
+				
+				<el-table :data="list3" border highlight-current-row :loading="listLoading" style="width: 100%;" id='table3'>
+					<el-table-column prop="field" label="字段名" align='center' width='150'></el-table-column>
+					<el-table-column prop="label" label="名称" align='center'>
+						<template scope="scope">
+							<span v-if="(scope.row.label == null || scope.row.label == '')">
+								<el-button type="text" size="small" @click="editLabel3(scope.$index, scope.row)">--</el-button>
+							</span>
+							<span v-else>
+								<el-button type="text" size="small" @click="editLabel3(scope.$index, scope.row)">{{scope.row.label}}</el-button>
+							</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="remark" label="备注" align='center'>
+						<template scope="scope">
+							<span v-if="(scope.row.remark == null || scope.row.remark == '')">
+								<el-button type="text" size="small" @click="editRemark3(scope.$index, scope.row)">--</el-button>
+							</span>
+							<span v-else>
+								<el-button type="text" size="small" @click="editRemark3(scope.$index, scope.row)">{{scope.row.remark}}</el-button>
+							</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="type" label="类型" align='center' width='100'></el-table-column>
+					<el-table-column prop="iskey" label="主键" align='center' width='70'></el-table-column>
+					<el-table-column prop="isnullable" label="为空" align='center' width='70'>
+						<template scope="scope">
+              				<span v-if="(scope.row.isnullable == '1')">
+                				空
+              				</span>
+              				<span v-else="(scope.row.isnullable =='0')">
+                				非空
+              				</span>
+            			</template>
+					</el-table-column>
+				</el-table>
+    		</el-form>
+    		
+  		</el-tab-pane>
+	</el-tabs>
+	
+	<el-dialog title="修改数据库别名" :visible.sync="editVisible1" :close-on-click-modal="false" width="35%">
+			<el-form label-width="80px">
+				<el-form-item :label="par.dbname">：
+					<el-input v-model="par.label" style='width:300px' size="mini"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editVisible1 = false;">取消</el-button>
+				<el-button type="primary" @click.native="labelSubmit">保存</el-button>
+			</div>
+	</el-dialog>
+	<el-dialog title="修改数据库备注" :visible.sync="editVisible2" :close-on-click-modal="false" width="35%">
+			<el-form label-width="">
+				<el-form-item :label="par.dbname">：
+					<el-input type='textarea' v-model="par.remark" style='width:100%'></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editVisible2 = false">取消</el-button>
+				<el-button type="primary" @click.native="remarkSubmit">保存</el-button>
+			</div>
+	</el-dialog>
+	<el-dialog title="数据表别名修改" :visible.sync="editVisible12" :close-on-click-modal="false" width="35%">
+			<el-form label-width="80px">
+				<el-form-item :label="par2.tbname">：
+					<el-input v-model="par2.label" style='width:300px' size="mini"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editVisible12 = false">取消</el-button>
+				<el-button type="primary" @click.native="labelSubmit2">保存</el-button>
+			</div>
+	</el-dialog>
+	<el-dialog title="数据表备注修改" :visible.sync="editVisible22" :close-on-click-modal="false" width="35%">
+			<el-form label-width="">
+				<el-form-item :label="par2.tbname">：
+					<el-input type='textarea' v-model="par2.remark" style='width:100%'></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editVisible22 = false">取消</el-button>
+				<el-button type="primary" @click.native="remarkSubmit2">保存</el-button>
+			</div>
+	</el-dialog>
+		<el-dialog title="字段名称修改" :visible.sync="editVisible13" :close-on-click-modal="false" width="35%">
+			<el-form label-width="80px">
+				<el-form-item :label="par3.field">：
+					<el-input v-model="par3.label" style='width:300px' size="mini"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editVisible13 = false">取消</el-button>
+				<el-button type="primary" @click.native="labelSubmit3">保存</el-button>
+			</div>
+	</el-dialog>
+	<el-dialog title="数据表备注修改" :visible.sync="editVisible23" :close-on-click-modal="false" width="35%">
+			<el-form label-width="">
+				<el-form-item :label="par3.field">：
+					<el-input type='textarea' v-model="par3.remark" style='width:100%'></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editVisible23 = false">取消</el-button>
+				<el-button type="primary" @click.native="remarkSubmit3">保存</el-button>
+			</div>
+	</el-dialog>
+	<el-dialog title="下载数据库说明书" :visible.sync="editVisible3" :close-on-click-modal="false" width="40%">
+			<el-form label-width="150px">
+				<el-form-item label="数据库：">
+					{{editpar.label}}
+				</el-form-item>
+				<el-form-item label="下载链接：">
+					<a :href="docurl">{{docurl}}</a>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button type="primary" @click.native="expSubmit" style='float:left'>生成说明书</el-button>
+				<el-button @click.native="editVisible3 = false">关闭</el-button>
+			</div>
+	</el-dialog>
+	<el-dialog title="绑定数据库到应用" :visible.sync="bindModel" :close-on-click-modal="false" width="30%">
+			<el-form label-width="150px">
+				<div style='margin-bottom:5px;'>{{this.editpar.label}}由以下应用维护:</div>
+				<el-table ref="multipleTable" :data="bindList" border highlight-current-row :loading="listLoading" style="width: 100%;"  @selection-change="handleSelectionChange">
+					<el-table-column type="selection" width="55"></el-table-column>
+					<el-table-column prop="appname" label="应用名称" align='center'></el-table-column>
+					<el-table-column prop="companyname" label="开发商" align='center'></el-table-column>
+				</el-table>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button type="primary" @click.native="bindSubmit">保存</el-button>
+			</div>
+	</el-dialog>
+</div>

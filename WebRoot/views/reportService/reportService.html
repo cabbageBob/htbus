@@ -1,0 +1,69 @@
+<div>
+	<div class='tableInfo'>
+		<div class='tableOperate'>
+			<div class='reportLabel'>1.数据资源统计</div>
+		</div>
+		<div style="text-indent: 2em;letter-spacing: 5px;font-size: 18px;line-height: 50px;color: #000;">
+			数据服务平台，共计<span class='grn'>{{this.list.db_sum}}</span>个数据库<span class='grn'>{{this.list.table_sum}}</span>张表<span class='grn'>{{this.list.field_sum}}</span>字种字段；数据字典完整率达<span class='grn'>{{this.list.sta_avg}}%</span>。
+		</div>
+		<el-table :data="list.detail" highlight-current-row :loading="listLoading" style="width: 100%;min-height:0px;">
+			<el-table-column label='序号' type="index" width="60"></el-table-column>
+			<el-table-column prop="dbremark" label="备注" sortable align='center'></el-table-column>
+			<el-table-column prop="dbname" label="数据库名" align='center'></el-table-column>
+			<el-table-column prop="table_cnt" label="数据表数量" align='center'></el-table-column>
+			<el-table-column prop="field_cnt" label="字段数量" align='center'></el-table-column>
+			<el-table-column prop="sta" label="字典完整率" align='center'>
+				<template scope="scope">
+              		<el-progress :percentage="(scope.row.sta)"></el-progress>
+            	</template>
+			</el-table-column>
+		</el-table>
+		<div class='tabletitle'>▲ 数据字典完整率统计表</div>
+	</div>
+	<div class='tableInfo'>
+		<div class='tableOperate'>
+			<div class='reportLabel'>2.服务资源统计表</div>
+		</div>
+		<div style="text-indent: 2em;letter-spacing: 5px;font-size: 18px;line-height: 50px;color: #000;">
+			数据服务平台共注册<span class='grn'>{{this.list2.app_sum}}</span>个应用系统，共计发布了<span class='grn'>{{this.list2.service_sum}}</span>个服务接口；其中<span class='grn'>{{this.list2.service_normal}}</span>个服务接口状态正常，<span class='red'>{{this.list2.service_error}}</span>个服务接口状态异常
+		</div>
+		<div id='chart1' style='width:100%;height:400px;'></div>
+		<div class='tabletitle'>▲ 应用系统服务资源数量统计表</div>
+		<el-table :data="list2err" highlight-current-row :loading="listLoading" style="width: 100%;min-height:0px;">
+			<el-table-column label='序号' type="index" width="60"></el-table-column>
+			<el-table-column prop="servicename" label="接口名称" sortable align='center'></el-table-column>
+			<el-table-column prop="appname" label="接口提供者" align='center'></el-table-column>
+			<el-table-column prop="res_status" label="最近响应状态" align='center'></el-table-column>
+			<el-table-column prop="last_res_tm" label="最近响应时间" align='center'></el-table-column>
+		</el-table>
+		<div class='tabletitle'>▲ 状态异常服务接口统计表</div>
+	</div>
+	<div class='tableInfo'>
+		<div class='tableOperate'>
+			<div class='reportLabel'>3.服务支撑统计</div>
+		</div>
+		<div style="text-indent: 2em;letter-spacing: 5px;font-size: 18px;line-height: 50px;color: #000;">
+			数据服务平台目前支撑<span class='grn'>{{this.list3.app_sum}}</span>个应用系统正常运行，其中最大支撑<span class='grn2'>{{this.list3.max_appname}}</span>达<span class='grn'>{{this.list3.max_request}}</span>次服务调用。
+		</div>
+		<el-table :data="list3.detail" highlight-current-row :loading="listLoading" style="width: 100%;min-height:0px;">
+			<el-table-column label='序号' type="index" width="60"></el-table-column>
+			<el-table-column prop="appname" label="应用系统名称" sortable align='center'></el-table-column>
+			<el-table-column prop="power_cnt" label="权限个数" align='center'></el-table-column>
+			<el-table-column prop="request_sum" label="累计调用" align='center'></el-table-column>
+			<el-table-column prop="today_sum" label="今日日活" align='center'></el-table-column>
+			<el-table-column prop="maxday_sum" label="最高日活" align='center'></el-table-column>
+			<el-table-column prop="maxday_date" label="最高日活日期" align='center'></el-table-column>
+		</el-table>
+		<div class='tabletitle'>▲ 平台对应用系统服务支撑情况统计表</div>
+	</div>
+	<div class='tableInfo'>
+		<div class='tableOperate'>
+			<div class='reportLabel'>4.服务调用统计</div>
+		</div>
+		<div style="text-indent: 2em;letter-spacing: 5px;font-size: 18px;line-height: 50px;color: #000;">
+			数据服务平台自运行至今，服务接口共被调用<span class='grn'>{{this.list4.request_sum}}</span>次，今日被调用<span class='grn'>{{this.list4.today_sum}}</span>次,今日被调用最频繁的前三个服务为:<span class='grn'>{{this.top3}}</span>。
+		</div>
+		<div id='chart2' style='width:100%;height:400px;'></div>
+		<div class='tabletitle'>▲ 数据服务日调用过程统计图</div>
+	</div>
+</div>

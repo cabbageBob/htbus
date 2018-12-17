@@ -1,0 +1,121 @@
+<div id='div-data'>
+		<el-col :span='24' class='toolbar'>
+			<el-form :inline="true" :model="filters">
+				<el-form-item label="是否取消隐藏">
+					<el-switch v-model="cancleHide" on-text="" off-text="" @change='alert("功能暂未实现")'>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="default" @click='alert("功能暂未实现")'>重新生成数据库说明书</el-button>
+				</el-form-item>
+				<el-form-item>
+			</el-form>
+		</el-col>
+		<div style='display:flex;clear:both;'>
+			<el-card class="box-card" style='flex:0 0 220px;margin:0px 16px 0 0;box-shadow:none;'>
+			  <div slot="header" class="clearfix">
+			    数据库实例
+			    <el-button class='tree_buttons' style="float: right;" type="text" @click='isTreeEditing = !isTreeEditing'>
+				{{isTreeEditing?'完成':'编辑'}}
+				</el-button>
+			  </div>
+			  <div v-if="isTreeEditing" style='margin:-10px 0 10px 0;'>
+			  		<el-button class='tree_buttons' type="text" @click='addVisible = true'>注册</el-button>
+			  		<el-button class='tree_buttons' type="text" @click='onEditTree("delInstance")'>删除</el-button>
+			  		<el-button class='tree_buttons' type="text" @click='onEditTree("editInstance")'>修改</el-button>
+			  </div>
+			  <el-tree :data="treedata" :props="treeprops" node-key="id" accordion :default-expanded-keys='currentExpanded' highlight-current @node-click="orgNodeClick" style='border:none;'></el-tree>
+			</el-card>
+			<el-table :data="data1" highlight-current-row :loading="listLoading" @row-click="onClickTable" style="flex:0 0 300px;margin-right:16px;">
+				<el-table-column type="index">
+				</el-table-column>
+				<el-table-column prop="tbname" label="表名" width="90" sortable>
+				</el-table-column>
+				<el-table-column prop="tbremark" label="说明" min-width="90" sortable>
+				</el-table-column>
+			</el-table>
+			<el-table :data="data2" highlight-current-row :loading="listLoading" style="flex:1;">
+				<el-table-column type="index">
+				</el-table-column>
+				<el-table-column prop="field" label="字段" width="90" sortable>
+				</el-table-column>
+				<el-table-column prop="remark" label="说明" min-width="90" sortable>
+				</el-table-column>
+				<el-table-column prop="type" label="类型" width="150" sortable>
+				</el-table-column>
+				<el-table-column prop="length" label="长度" width="90" sortable>
+				</el-table-column>
+				<el-table-column prop="iskey" label="主键" width="90" sortable>
+				</el-table-column>
+				<el-table-column prop="isnullable" label="为空" width="90" sortable>
+				</el-table-column>
+				<el-table-column prop="isidentity" label="标识" width="90" sortable>
+				</el-table-column>
+				<el-table-column prop="defaultvalue" label="默认值" width="100" sortable>
+				</el-table-column>
+			</el-table>
+		</div>
+		
+		<el-dialog :visible.sync='addVisible' title="注册数据库服务实例" size='tiny'>
+			<el-form :model="newInstance" label-width="120px" :rules="rules" ref='addForm'>
+				<el-form-item label="中文名称" prop="name">
+					<el-input v-model="newInstance.name" ></el-input>
+				</el-form-item>
+				<el-form-item label="IP地址" prop="ip">
+					<el-input v-model="newInstance.ip" ></el-input>
+				</el-form-item>
+				<el-form-item label="端口" prop="port">
+				    <el-input v-model="newInstance.port" ></el-input>
+				</el-form-item>
+				<el-form-item label="实例名" prop="instance_name">
+					<el-input v-model="newInstance.instance_name" ></el-input>
+				</el-form-item>
+				<el-form-item label="数据库类型" prop="dbtype">
+					<el-select v-model="newInstance.dbtype" placeholder="请选择">
+					    <el-option label="SQL Server" value="MSSQL" />
+					  </el-select>
+				</el-form-item>
+				<el-form-item label="账号" prop="account">
+					<el-input v-model="newInstance.account" ></el-input>
+				</el-form-item>
+				<el-form-item label="密码" prop="password">
+					<el-input v-model="newInstance.password" ></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="onAddCancel">取消</el-button>
+				<el-button type="primary" @click.native="onAddInstance">提交</el-button>
+			</div>
+		</el-dialog>
+		
+		<el-dialog :visible.sync='editVisible' title="修改数据库服务实例" size='tiny'>
+			<el-form :model="editingInstance" label-width="120px" :rules="rules" ref='editForm'>
+				<el-form-item label="中文名称" prop="name">
+					<el-input v-model="editingInstance.name" ></el-input>
+				</el-form-item>
+				<el-form-item label="IP地址" prop="ip">
+					<el-input v-model="editingInstance.ip" ></el-input>
+				</el-form-item>
+				<el-form-item label="端口" prop="port">
+				    <el-input v-model="editingInstance.port" ></el-input>
+				</el-form-item>
+				<el-form-item label="实例名" prop="instance_name">
+					<el-input v-model="editingInstance.instance_name" ></el-input>
+				</el-form-item>
+				<el-form-item label="数据库类型" prop="dbtype">
+					<el-select v-model="editingInstance.dbtype" placeholder="请选择">
+					    <el-option label="SQL Server" value="MSSQL" />
+					  </el-select>
+				</el-form-item>
+				<el-form-item label="账号" prop="account">
+					<el-input v-model="editingInstance.account" ></el-input>
+				</el-form-item>
+				<el-form-item label="密码" prop="password">
+					<el-input v-model="editingInstance.password" ></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="onEditCancel">取消</el-button>
+				<el-button type="primary" @click.native="onEditInstance">提交</el-button>
+			</div>
+		</el-dialog>
+</div>

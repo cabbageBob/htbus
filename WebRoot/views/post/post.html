@@ -1,0 +1,54 @@
+<div id='div-post' style='display:flex;'>
+	<el-card class="box-card" style='flex:0 0 300px;margin:10px 16px 0 0;box-shadow:none;'>
+	  <div slot="header" class="clearfix">
+	    组织机构树
+	  </div>
+	  <el-tree ref="tree" :data="treedata" :props="treeprops" node-key="id" accordion highlight-current @node-click="onNodeClick" style='border:none;'></el-tree>
+	</el-card>
+	<div style='flex:1;'>
+		<el-col :span='24' class='toolbar'>
+			<el-form :inline="true">
+				<el-form-item>
+					<el-button type="primary" @click="addVisible = true">添加岗位</el-button>
+				</el-form-item>
+			</el-form>
+		</el-col>
+	<el-table :data="tableData" highlight-current-row @row-click="onRowClick" style="width: 100%;" height='500'>
+			<el-table-column type="index" width="60">
+			</el-table-column>
+			<el-table-column prop="postid" label="编号" width="90" sortable>
+			</el-table-column>
+			<el-table-column prop="postname" label="岗位名称" min-width="90" sortable>
+			</el-table-column>
+			<el-table-column label="操作" width="150">
+				<template scope="scope">
+					<el-button size="small" @click="editVisible=true">编辑</el-button>
+					<el-button type="danger" size="small" @click="onDelPost(scope.$index, scope.row)">删除</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+	</div>
+	
+	<el-dialog :visible.sync='addVisible' title="添加岗位" size='tiny'>
+			<el-form :model="newPost" label-width="120px" :rules="rules" ref='addPostForm'>
+				<el-form-item label="岗位名称" prop=postname>
+					<el-input v-model="newPost.postname" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="onAddCancel">取消</el-button>
+				<el-button type="primary" @click.native="onAddPost">提交</el-button>
+			</div>
+	</el-dialog>
+	<el-dialog :visible.sync='editVisible' title="编辑岗位" size='tiny'>
+			<el-form :model="editingPost" label-width="120px" :rules="rules" ref='editPostForm'>
+				<el-form-item label="岗位名称" prop=name>
+					<el-input v-model="editingPost.postname" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editVisible=false">取消</el-button>
+				<el-button type="primary" @click.native="onEditPost">提交</el-button>
+			</div>
+	</el-dialog>
+</div>

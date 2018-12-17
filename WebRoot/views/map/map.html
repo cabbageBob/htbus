@@ -1,0 +1,129 @@
+<div>
+  	<div style='float:left;width:15%;margin-top:10px;'>
+  		<div class='clearfix table-header' style='height:50px'>
+  			<div style='margin:10px 0;color:#5f5f5f'>地图服务器列表</div>
+  		</div>
+	    <div style='border: 1px solid #e6ebf5;'>
+	    	<el-button type="text" style='margin-left:10px;' @click='chakan'>查 看</el-button>
+	    	<el-button type="text" @click='xinzeng'>新 增</el-button>
+	    	<el-button type="text" @click='shanchu'>删 除</el-button>
+	    </div>
+	    <div style='border: 1px solid #e6ebf5;border-top: 0px solid #e6ebf5;height:100%'>
+  			<el-menu @select='handleselect' :default-active='0'>
+  				<el-menu-item v-for="item in menuList" :index='item.indexId' style='margin:5px 0;'>{{item.map_name}}</el-menu-item>
+          	</el-menu>
+		</div>      
+  	</div>
+  	
+  	<div style='float:left;width:25%;margin-left:2%;'>
+  		<el-card class="box-card" style='flex:0 0 300px;margin:10px 16px 0 0;box-shadow:none;'>
+	  		<div slot="header" class="clearfix">
+	  			{{this.menuList[this.par].map_name}}{{fileUrl}}
+	  			<el-button class='tree_buttons' style="float: right;margin:-8px 0" type="text" @click='back'>返回</el-button>
+	  		</div>
+	  		<div style='max-height:680px;overflow:auto'>
+	  			<div v-for='item in list.folders'>
+	  				<img src='views/map/wenjian.png' width='10%'><el-button type='text' @click='files(item)'>{{item}}</el-button>
+				</div>
+				<div v-for='item in list.services'>
+					<img src='views/map/document.png' width='10%'><el-button type='text' @click='services(item)'>{{item.serviceName}}({{item.type}})</el-button>
+				</div>
+			</div>
+		</el-card>
+	</div>
+	
+	<div style='float:left;width:56%;margin-left:2%;'>
+		<el-card class="box-card" style='flex:0 0 300px;margin:10px 16px 0 0;box-shadow:none;'>
+	  		<div style='max-height:735px;overflow:auto'>
+	  			<div class='svs'>地图服务名称:<span class='svs2'>{{this.list2.name}}</span></div>
+	  			<div class='pull-right' v-if="this.list2.type=='MapServer'"><el-button type='text' @click='seaMap'>查看地图</el-button></div>
+	  			<br>
+	  			<div class='svs'>url:<span style='font-size:20px;margin-left:10px;'>{{this.list2.url}}</span></div>
+	  			<div class='svs'>spatialReference:{
+	  				<div v-if='this.list2.fullExtent.spatialReference.wkt'>
+	  					<div class='svs' style='margin-left:50px;'>wkid:<span class='svs2'>{{this.list2.fullExtent.spatialReference.wkt}}</span></div>
+	  				</div>
+	  				<div v-else>
+	  					<div class='svs' style='margin-left:50px;'>latestWkid:<span class='svs2'>{{this.list2.fullExtent.spatialReference.latestWkid}}</span></div>
+	  					<div class='svs' style='margin-left:50px;'>wkid(坐标系):<span class='svs2'>{{this.list2.fullExtent.spatialReference.wkid}}</span></div>
+	  				</div>
+	  			}</div>
+	  			<div class='svs'>xmin:<span class='svs2'>{{this.list2.fullExtent.xmin}}</span></div>
+	  			<div class='svs'>xmax:<span class='svs2'>{{this.list2.fullExtent.xmax}}</span></div>
+	  			<div class='svs'>ymin:<span class='svs2'>{{this.list2.fullExtent.ymin}}</span></div>
+	  			<div class='svs'>ymax:<span class='svs2'>{{this.list2.fullExtent.ymax}}</span></div>
+	  			<div class='svs'>lods:{
+	  				<div class='svs' v-for='item in this.list2.tileInfo.lods' style='margin-left:50px;'>
+	  					level:<span class='svs2'>{{item.level}}</span> scale:<span class='svs2'>{{item.scale}}</span>
+	  				</div>
+	  			}</div>
+	  			<div class='svs'>layers:{
+	  				<div class='svs' v-for='item in this.list2.layers' style='margin-left:50px;'>
+	  					<span class='svs2'>{{item.name}}({{item.id}})</span>
+	  				</div>
+	  			}</div>
+			</div>
+		</el-card>
+	</div>
+	
+	
+	<el-dialog title="查看地图服务" :visible.sync="ckModel" :close-on-click-modal="false" width="25%">
+			<el-form label-width="200px" style='' :rules='menuData' ref='menupar' :model='menupar'>
+				可修改：
+				<el-form-item label="地图服务名称：" prop='map_name'>
+					<el-input v-model="menupar.map_name" style='width:150px;' size="mini"></el-input>
+				</el-form-item>
+				<el-form-item label="地图服务地址：" prop='map_url'>
+					<el-input v-model="menupar.map_url" style='width:150px;' size="mini"></el-input>
+				</el-form-item>
+				<el-form-item label="用户名：" prop='username'>
+					<el-input v-model="menupar.username" style='width:150px;' size="mini"></el-input>
+				</el-form-item>
+				<el-form-item label="密码：" prop="password">
+					<el-input v-model="menupar.password" style='width:150px;' size="mini"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="ckModel = false;">取消</el-button>
+				<el-button type="primary" @click.native="ckSubmit">保存</el-button>
+			</div>
+	</el-dialog>
+	
+	<el-dialog title="注册地图服务" :visible.sync="xzModel" :close-on-click-modal="false" width="25%">
+			<el-form label-width="180px" :rules='menuData' ref='addmenupar' :model='addmenupar'>
+				<el-form-item label="地图服务名称：" prop='map_name'>
+					<el-input v-model="addmenupar.map_name" style='width:150px;' size="mini"></el-input>
+				</el-form-item>
+				<el-form-item label="地图服务地址：" prop='map_url'>
+					<el-input v-model="addmenupar.map_url" style='width:150px;' size="mini"></el-input>
+				</el-form-item>
+				<el-form-item label="用户名：" prop='username'>
+					<el-input v-model="addmenupar.username" style='width:150px;' size="mini"></el-input>
+				</el-form-item>
+				<el-form-item label="密码：" prop="password">
+					<el-input v-model="addmenupar.password" style='width:150px;' size="mini"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="xzModel = false;">取消</el-button>
+				<el-button type="primary" @click.native="xzSubmit">保存</el-button>
+			</div>
+	</el-dialog>
+	
+	</el-dialog>
+		<el-dialog title="删除确认" :visible.sync="scModel" :close-on-click-modal="false" width="25%">
+			<el-form label-width="80px">
+				<div style='color:red;margin-left:50px;'>您确定要删除吗？</div>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="scModel = false">取消</el-button>
+				<el-button type="primary" @click.native="scSubmit">确定</el-button>
+			</div>
+	</el-dialog>
+	
+	<el-dialog title="地图" :visible.sync="mapModel" :close-on-click-modal="false" width="90%" height="600">
+			<div style='font-weight:bold'>地图服务地址: {{list2.mapThumbnail}}</div>
+			<iframe width='100%' height='600px' src='' id='mm'></iframe>
+	</el-dialog>
+	
+</div>

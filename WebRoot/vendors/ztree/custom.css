@@ -1,0 +1,16 @@
+/*====zTree 插件*/
+.ztree li span.switch {
+	margin-top: 4px;
+}
+.ztree li span.button.chk {
+	margin-top: 4px;
+}
+.ztree * {
+	font-size: 13px;
+}
+.ztree li a {
+	padding: 5px 3px 0 0;
+}
+.ztree li a.curSelectedNode {
+	padding-top: 4px;
+}

@@ -1,0 +1,124 @@
+<div id='box'>
+	<div style='float:left;width:18%' id='box1'>
+		<el-form>
+			<i class='fa fa-caret-right' style='margin-right:3px;'></i>资源目录树
+		</el-form>
+		<el-form style='margin-top:10px;'>
+			<div class="input-group merged" style="width: 88%;">
+			<el-input size='mini' type="text" class="form-control input-sm" name="keyword" id="keyword" placeholder="资源名称..." v-on:input="search" v-model="searchValue">
+				<template slot="append"><i class="fa fa-search"></i></template>
+			</el-input>
+			</div>
+		</el-form>
+		<el-col :span="21" style='margin-top:10px;border:1px solid silver;height:700px;overflow: auto;'>
+			<ztree :setting="zTreeSetting"></ztree>
+    	</el-col>
+	</div>
+	<div style='float:left;width:82%;' id='box2'>
+		<el-tabs v-model="activeName2" style='margin-top:14px;'>
+    		<el-tab-pane label="资源信息" name="first">
+    			<div style='border:1px solid silver;height:700px;overflow:auto''>
+					<div style='text-align:center' v-if='this.currentMatedata.length>0'>
+						<el-button type='text' @click.native='exModel=true'>点击添加额外项</el-button>
+						<el-button class='pull-right' type='primary' size='mini' style='margin:10px 20px' @click.stop="save">保存 </el-button>
+					</div>
+					<el-form label-width="20%" v-for="item in currentMatedata">
+						<span v-if="item.schame_name=='资源描述'">
+							<el-form-item :label='item.schame_name'>
+								<el-input type='textarea' style='width:75%' size='mini' v-model='item.value' placeholder="请输入内容"></el-input>
+								<span v-show="defarray.indexOf(item.schame_code)==-1">
+									<a href="javascript:void(0)" @click="deleteItem(item)">删除</a>
+								</span>
+							</el-form-item>
+						</span>
+						<span v-else>
+							<el-form-item :label='item.schame_name'>
+								<el-input style='width:75%' size='mini' v-model='item.value' placeholder="请输入内容"></el-input>
+								<span v-show="defarray.indexOf(item.schame_code)==-1">
+									<a href="javascript:void(0)" @click="deleteItem(item)">删除</a>
+								</span>
+							</el-form-item>
+						</span>
+					</el-form>
+				</div>
+    		</el-tab-pane>
+    		<el-tab-pane label="数据资源" name="second">
+    			<div style='border:1px solid silver;'>
+					<el-table :data="dataResources" highlight-current-row border style="width:100%">
+						<el-table-column type="index"></el-table-column>
+						<el-table-column prop="name" label="数据库名" align='center'></el-table-column>
+						<el-table-column prop="ip" label="ip地址" align='center'></el-table-column>
+						<el-table-column prop="port" label="端口" align='center'></el-table-column>
+						<el-table-column prop="dbtype" label="数据库类型" align='center'></el-table-column>
+						<el-table-column prop="tbname" label="表名称" align='center'></el-table-column>
+						<el-table-column prop="label" label="名称" align='center'></el-table-column>
+						<el-table-column prop="remark" label="备注" align='center'></el-table-column>
+		  			</el-table>
+				</div>
+    		</el-tab-pane>
+    		<el-tab-pane label="服务资源" name="third">
+    			<div style='border:1px solid silver;height:700px;'>
+					<el-table :data="serviceResources" highlight-current-row border style="width:100%">
+						<el-table-column type="index"></el-table-column>
+						<el-table-column prop="servicename" label="接口名称" align='center'></el-table-column>
+						<el-table-column prop="path" label="接口地址" align='center'></el-table-column>
+						<el-table-column prop="appname" label="业务系统" align='center'></el-table-column>
+						<el-table-column prop="berequest_count" label="调用次数" align='center'></el-table-column>
+						<el-table-column prop="cache_effective" label="缓存有效期" align='center'></el-table-column>
+		  			</el-table>
+				</div>
+    		</el-tab-pane>
+  		</el-tabs>
+	</div>
+	
+	<el-dialog title="添加" :visible.sync="scModel" :close-on-click-modal="false" width="25%">
+		<el-form label-width="150px" style='' :rules='rules' ref='newMatedata' :model='newMatedata'>
+			<el-form-item label="类型" prop='type'>
+				<el-radio-group v-model="newMatedata.type">
+      				<el-radio label="class">资源分类</el-radio>
+      				<el-radio label="matedata">资源</el-radio>
+    			</el-radio-group>
+			</el-form-item>
+			<!-- <el-form-item label="元素ID" prop='code'>
+				<el-input v-model="newMatedata.code" style='width:150px;' size="mini"></el-input>
+			</el-form-item> -->
+			<el-form-item label="名称" prop="name">
+				<el-input v-model="newMatedata.name" style='width:150px;' size="mini"></el-input>
+			</el-form-item>
+		</el-form>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click.native="scModel = false;">取消</el-button>
+			<el-button type="primary" @click.native="addCMBack">保存</el-button>
+		</div>
+	</el-dialog>
+	
+	<el-dialog title="添加额外项目" :visible.sync="exModel" :close-on-click-modal="false" width="25%">
+		<el-form label-width="150px" :rules='rulesItem' ref='newItem' :model='newItem'>
+			<el-form-item label="输入code" prop='schame_code'>
+				<el-input v-model="newItem.schame_code" style='width:150px;' size="mini"></el-input>
+			</el-form-item>
+			<el-form-item label="输入名称" prop="schame_name">
+				<el-input v-model="newItem.schame_name" style='width:150px;' size="mini"></el-input>
+			</el-form-item>
+			<el-form-item label="输入值" prop='value'>
+				<el-input v-model="newItem.value" style='width:150px;' size="mini"></el-input>
+			</el-form-item>
+		</el-form>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click.native="exModel = false;">取消</el-button>
+			<el-button type="primary" @click.native="addItemBack">保存</el-button>
+		</div>
+	</el-dialog>
+	
+	<el-dialog title="删除新加项" :visible.sync="delModel" :close-on-click-modal="false" width="25%">
+		<form class="form-horizontal ">
+			您确定要删除用户:[<span style='color:red;font-weight: bold;'>{{selectedItem.schame_name}}</span>]？<span style="color:red;">一旦删除不可更改！</span>
+		</form>
+		<div slot="footer" class="dialog-footer">
+			<el-button @click.native="delModel = false;">取消</el-button>
+			<el-button type="primary" @click.native="delBack">保存</el-button>
+		</div>
+	</el-dialog>
+	
+</div>
+

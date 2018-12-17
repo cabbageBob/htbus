@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dispatcher>
+	<bean name="public" className="htbus.action.PublicAction"
+	needAuthenticate="no"></bean>
+	<bean name="user" className="htbus.action.UserAction"
+	needAuthenticate="yes"></bean>
+	<bean name="org" className="htbus.action.OrgAction"
+	needAuthenticate="yes"></bean>
+	<bean name="db" className="htbus.action.DataAction"
+	needAuthenticate="yes"></bean>
+	<bean name="resource" className="htbus.action.ResourceAction"
+	needAuthenticate="yes"></bean>
+	<bean name="service" className="htbus.action.ServiceAction"
+	needAuthenticate="yes"></bean>
+	<bean name="map" className="htbus.action.MapAction"
+	needAuthenticate="yes"></bean>
+	<bean name="api" className="htbus.action.ApiAction"
+	needAuthenticate="no"></bean>
+</dispatcher> 

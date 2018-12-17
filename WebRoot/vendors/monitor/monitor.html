@@ -1,0 +1,3 @@
+<div class="monitor" @click="monitor" :class="{off:off}" :title="off ? '已关闭监控,点击开启' : '已开启监控,点击关闭'">
+    <div :class="[color == 'green' ? 'shineGreen' : 'shineRed']"></div>
+</div>

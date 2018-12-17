@@ -1,0 +1,108 @@
+<div id='div-org' style='display:flex;'>
+	<el-card class="box-card" style='flex:0 0 235px;margin:10px 0px 0 0;margin-right:10px;box-shadow:none;'>
+		<div slot="header" class="clearfix">
+	    	应用系统列表
+	  	</div>
+	  	<template>
+			<el-tabs :tab-position="tabPosition" v-model="value" @tab-click="tablechange">
+		    	<el-tab-pane v-for="item in yewu" :label="item.appname"></el-tab-pane>
+			</el-tabs>
+		</template>
+	</el-card>
+	<div style='flex:1;'>
+		<el-col :span='24' class='toolbar'>
+			<el-form :inline="true">
+				<el-form-item label='服务提供者'>
+					<el-select v-model="value2" placeholder="服务提供者">
+    					<el-option value="all" label="全部">全部</el-option>
+    					<el-option
+      						v-for="item in yewu"
+      						:key="item.id"
+      						:label="item.appname"
+      						:value="item.id">
+    					</el-option>
+  					</el-select>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="search">查询</el-button>
+				</el-form-item>
+				<el-form-item>
+					<span v-if="this.selectNum==''">
+						<el-button plain disabled>授权→</el-button>
+					</span>
+					<span v-else>
+						<el-button type="primary" @click="add">授权→</el-button>
+					</span>
+				</el-form-item>
+				<el-form-item>
+					<span v-if="this.selectNum2==''">
+						<el-button plain disabled>←撤销</el-button>
+					</span>
+					<span v-else>
+						<el-button type="primary" @click="remove">←撤销</el-button>
+					</span>
+				</el-form-item>
+			</el-form>
+		</el-col>
+		<div style='float:left;width:48%'>
+		  <div style='margin-bottom:-10px'>
+		  	<el-form :inline="true">
+		  		<el-form-item label='未授权的接口：'>
+					<el-input placeholder="接口名称/Path" suffix-icon="el-icon-search" size='mini' style='float:right;' @change='noSearch' v-model='noSearchvalue'></el-input>
+				</el-form-item>
+		  	</el-form>
+		  </div>
+		  <div style='border: 1px solid #e6ebf5;'>
+		  	<el-table :data="list" highlight-current-row :loading="listLoading" style="width:100%" @selection-change="handleSelectionChange">
+				<el-table-column type="expand" width="25">
+		      	  <template scope="props">
+		        	<el-form label-position="left" style="word-break:break-all;">
+				 		<el-form-item  label="服务接口说明：" style="width:100%;margin-bottom:0px;">
+				 			{{ props.row.remark }}
+				 		</el-form-item>
+				 		<el-form-item  label="服务提供者：" style="width:100%;margin-bottom:0px;">
+					 		{{ props.row.from_appname }}
+					 	</el-form-item>
+					</el-form>
+		  	      </template>
+		  	 	</el-table-column>
+				<el-table-column type="selection" width="35" prop='uuid'></el-table-column>
+				<el-table-column type="index"></el-table-column>
+				<el-table-column prop="servicename" label="接口名称" align='center'></el-table-column>
+				<el-table-column prop="path" label="接口path" align='center'></el-table-column>
+		  	</el-table>
+		  </div>
+		</div>
+		
+		<div style='float:left;width:48%;margin-left:10px;'>
+		  <div style='margin-bottom:-10px'>
+		  	<el-form :inline="true">
+		  		<el-form-item label='已授权的接口：'>
+					<el-input placeholder="接口名称/Path" suffix-icon="el-icon-search" size='mini' style='float:right;' @change='hasSearch' v-model='hasSearchvalue'></el-input>
+				</el-form-item>
+		  	</el-form>
+		  </div>
+		  <div style="border: 1px solid #e6ebf5;">
+		  	<el-table :data="list1" highlight-current-row :loading="listLoading" style="width:100%" @selection-change="handleSelectionChange2">
+				<el-table-column type="expand" width="55">
+		  	    <template scope="props">
+		  	      <el-form label-position="left" style="word-break:break-all;">
+					 <el-form-item  label="服务接口说明:" style="width:100%;margin-bottom:0px;">
+					 	{{ props.row.remark }}
+					 </el-form-item>
+					 <el-form-item  label="服务提供者:" style="width:100%margin-bottom:0px;;">
+					 	{{ props.row.from_appname }}
+					 </el-form-item>
+					</el-form>
+		    	  </template>
+		    	</el-table-column>
+				<el-table-column type="selection" width="55" prop='uuid'></el-table-column>
+				<el-table-column prop="servicename" label="接口名称" align='center'></el-table-column>
+				<el-table-column prop="path" label="接口path" align='center'></el-table-column>
+		  	</el-table>
+		  </div>
+		</div>
+		
+	</div>
+	
+</div>

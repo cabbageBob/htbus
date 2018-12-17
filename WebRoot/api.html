@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>数据服务总线开发API</title>
+</head>
+<body>
+<xmp theme="united" style="display:none;">
+###接口地址
+> http://test1.htwater.net/bus/{method}!{service}
+
+
+###用户登陆 login!public
+* 输入：username、userpassword
+* 输出：json map
+```
+{
+	result:true,//or false
+	message:"登陆成功",//or 用户名密码错误 and or 系统故障
+	token:"admin"//客户端token，需要在后边每次请求的请求头中头带上token
+}
+```
+
+###用户菜单 getUserMenu!user
+* 输出：json array
+```
+[
+	{
+		id: "1",
+		pId: "0",
+		name: "组织架构",
+		path: "/org",
+		icon: "user",
+		children: [
+			{
+				id: "1.1",
+				pId: "1",
+				name: "组织机构管理",
+				path: "/org/manage",
+				icon: null,
+				children: [ ]
+			},
+			{
+				id: "1.2",
+				pId: "1",
+				name: "角色管理",
+				path: "/org/roleManage",
+				icon: null,
+				children: [ ]
+			}
+		]
+	},{}
+]
+```
+
+###获取组织机构树：getOrgTree!org
+* 输出：json arry
+```
+[
+	{
+		id: "10",
+		pId: "00",
+		orgname: "行政组织架构",
+		ord: 1,
+		children: [
+			{
+			id: "1000",
+			pId: "10",
+			orgname: "信息中心",
+			ord: 2,
+			children: [ ]
+			}
+		]
+	}
+]
+```
+
+###根据组织机构代码获取所有人员： getPersonListByOrgid!org
+* 输入：orgid 组织代码
+* 输出：json array 
+```
+[
+    {
+        "uid": "zhaozj",
+        "name": "赵子建",
+        "mobile": "15968083130",
+        "tel": "057487876316",
+        "smobile": "673130",
+        "mail": "toadprince@vip.qq.com",
+        "sex": "男",
+        "photo": null
+    }
+]
+```
+
+###在某父节点下新建组织机构 addOrg!org
+* 输入：pid,orgname
+* 输出：json object 
+```
+{
+    "message": "添加组织机构成功",
+    "success": true
+}
+```
+
+###修改组织机构名称 updateOrg!org
+* 输入：id,orgname
+* 输出：json object 
+```
+{
+    "message": "修改组织机构成功",
+    "success": true
+}
+```
+
+###修改组织机构名称 delOrg!org
+* 输入：id
+* 输出：json object 
+```
+{
+    "message": "删除组织机构成功",
+    "success": true
+}
+```
+
+###修改组织机构排序（切换两个机构的排序号） updateOrgOrd!org
+* 输入：id1,id2
+* 输出：json object 
+```
+{
+    "message": "修改组织机构排序成功",
+    "success": true
+}
+```
+
+###检查人员ID是否重复 checkPersonUid!org
+* 输入：uid
+* 输出：json object 
+```
+{
+    "message": "ID可用",
+    "success": true
+}
+```
+
+###添加组织机构人员 addPerson!org
+* 输入：uid,name,mobile,tel,smobile,mail,sex,photo,orgids,postid(岗位id),roleid所属组织机构ID多个用逗号间隔
+* 输出：json object 
+```
+{
+    "message": "添加人员成功",
+    "success": true
+}
+```
+
+###修改组织机构人员信息 updatePerson!org
+* 输入：uid,name,mobile,tel,smobile,mail,sex,photo,orgids,postid,roleid所属组织机构ID多个用逗号间隔
+* 输出：json object 
+```
+{
+    "message": "人员信息修改成功",
+    "success": true
+}
+```
+
+###删除人员删除后不可恢复 delPerson!org
+* 输入：uid
+* 输出：json object 
+```
+{
+    "message": "人员删除成功",
+    "success": true
+}
+```
+
+###获取某机构下的所有岗位 getPostList!org
+* 输入：orgid
+* 输出：json array 
+```
+[
+	{
+		postid: 5,
+		postname: "外借技术岗",
+		orgid: "0-1-1-12"
+	},
+	{
+		postid: 6,
+		postname: "外借行政岗",
+		orgid: "0-1-1-12"
+	}
+]
+```
+
+###添加岗位 addPost!org
+* 输入：orgid,postname
+* 输出：json object 
+```
+{
+    "message": "添加岗位成功",
+    "success": true,
+    "data":{}//刚添加成功的岗位信息
+}
+```
+
+###修改岗位 updatePost!org
+* 输入：postid,postname
+* 输出：json object 
+```
+{
+    "message": "修改岗位成功",
+    "success": true
+}
+```
+
+###删除岗位 deletePost!org
+* 输入：postid
+* 输出：json object 
+```
+{
+    "message": "删除岗位成功",
+    "success": true
+}
+```
+
+###获取角色列表 getRoleList!org
+* 输入：无
+* 输出：json array 
+```
+[
+	{
+		roleid: 1,
+		rolename: "角色1"
+	}
+]
+```
+
+###添加角色 addRole!org
+* 输入：rolename
+* 输出：json object 
+```
+{
+    "message": "添加角色成功",
+    "success": true,
+    "data":{}//刚添加成功的角色信息
+}
+```
+
+###修改角色 updateRole!org
+* 输入：roleid,rolename
+* 输出：json object 
+```
+{
+    "message": "修改角色成功",
+    "success": true
+}
+```
+
+###删除角色 deleteRole!org
+* 输入：roleid
+* 输出：json object 
+```
+{
+    "message": "删除角色成功",
+    "success": true
+}
+```
+
+###获取数据库树状列表 getDBTree!db
+* 输入：roleid
+* 输出：json array
+```
+[
+	{
+		id: 5,
+		instance_name: "MSSQLSERVER",//实例名，用来拼接连接字符串的，很重要，不要和中文名混淆
+		label: "100.4数据库服务器",//中文名，别名
+		ip: "192.168.100.4",
+		port: "1433",
+		dbtype: "MSSQL",//数据库类型：MSSQL(微软的SQL SERVER)、ORCL(oracle)、MYSQL(mysql)
+		nodetype: "instance",//节点类型：instance(数据库服务实例)、database(数据库)
+		children: [
+			{
+				label: "AQJC",//显示在树节点上的
+				dbname: "AQJC",//数据库名，用来拼接连接字符串的数据库名
+				id: "5-AQJC",
+				instance_id: "5",//所在实例的ID
+				nodetype: "database",
+				visible: 1//是否可见，有的节点会被用户手动隐藏
+			},
+			{
+				label: "DB_VPN",
+				dbname: "DB_VPN",
+				id: "5-DB_VPN",
+				instance_id: "5",
+				nodetype: "database",
+				visible: 1
+			}
+		]
+	}
+]
+```
+
+###重新解析实例数据库树 analyzeDBTree!db
+* 输入：无
+* 输出：json array
+* 说明：返回结果与getDBTree一样，不同的是getDBTree是优先从redis缓存获取，analyzeDBTree是重新解析每个实例，将结果重新放置到缓存再返回，用于对实例做过增删改操作之后使用
+```
+[
+	{
+		id: 5,
+		instance_name: "MSSQLSERVER",//实例名，用来拼接连接字符串的，很重要，不要和中文名混淆
+		label: "100.4数据库服务器",//中文名，别名
+		ip: "192.168.100.4",
+		port: "1433",
+		dbtype: "MSSQL",//数据库类型：MSSQL(微软的SQL SERVER)、ORCL(oracle)、MYSQL(mysql)
+		nodetype: "instance",//节点类型：instance(数据库服务实例)、database(数据库)
+		children: [
+			{
+				label: "AQJC",//显示在树节点上的
+				dbname: "AQJC",//数据库名，用来拼接连接字符串的数据库名
+				sta:"30",//数据字典完整率，百分比
+				id: "5-AQJC",
+				instance_id: "5",//所在实例的ID
+				nodetype: "database",
+				visible: 1//是否可见，有的节点会被用户手动隐藏
+			},
+			{
+				label: "DB_VPN",
+				dbname: "DB_VPN",
+				sta:"30",//数据字典完整率，百分比
+				id: "5-DB_VPN",
+				instance_id: "5",
+				nodetype: "database",
+				visible: 1
+			}
+		]
+	}
+]
+```
+
+###设置数据库字典项是否隐藏 setVisible!db
+* 输入：id visible(0或1)
+* 输出：json object
+* 说明：字典项包括库、表、字段，均支持对其设置可见性，id参数拼接：实例ID-数据库名-表名-字段名
+```
+{
+    "message": "设置成功",
+    "success": true
+}
+```
+
+###解析数据库表信息 analyzeDBTables!db
+* 输入：instance_id dbname
+* 输出：json array
+```
+[
+	{
+		tbname: "WBS_raininfo",//表名
+		tbremark: "-",//表说明
+		sta:30,//数据字典完整率
+		visible:1//是否隐藏，目前还没这个字段，以后会有，0隐藏 1可见
+	}
+]
+```
+
+###解析表字段信息 analyzeTableFields!db
+* 输入：instance_id dbname tbname
+* 输出：json array
+```
+[
+	{
+		field: "STCD",//字段名
+		isidentity: 0,//是否是标识字段
+		iskey: 1,//是否是主键
+		type: "varchar",//字段类型
+		length: 50,//字段长度
+		isnullable: 0,//是否可为空
+		defaultvalue: null,//默认值
+		remarkt: null,//字段说明
+		visible:1//是否隐藏，目前还没这个字段，以后会有，0隐藏 1可见
+	}
+]
+```
+
+###获取某实例信息 getInstance!db
+* 输入：instance_id
+* 输出：json object
+```
+{
+	instance_id: 5,
+	instance_name: "MSSQLSERVER",
+	name: "100.4数据库服务器",
+	ip: "192.168.100.4",
+	port: "1433",
+	account: "sa",
+	password: "",
+	dbtype: "MSSQL"
+	users:["sa","OpenMas"] //登录用户名
+}
+```
+
+###添加数据库服务实例 addInstance!db
+* 输入：String name,String ip,String port,String instance_name,String account,String password,String dbtype
+* 输出：json object
+```
+{
+    "message": "添加实例成功",
+    "success": true
+}
+```
+
+###修改实例信息 updateInstance!db
+* 输入：String instance_id,String name,String ip,String port,String instance_name,String account,String password,String dbtype
+* 输出：json object
+```
+{
+    "message": "修改实例成功",
+    "success": true
+}
+```
+
+###删除数据库服务实例 deleteInstance!db
+* 输入：instance_id
+* 输出：json object
+```
+{
+    "message": "删除实例成功",
+    "success": true
+}
+```
+
+###获取数据库说明书信息 getDatabaseDicdoc!db
+* 输入：instance_id  dbname
+* 输出：json object
+```
+{
+    "message": "文档已生成请直接下载",
+    "success": true,
+    "docurl":"http://localhost:8080/bus_files/HT_DATA数据库说明书.doc"
+}
+```
+
+###生成数据库说明书 createDatabaseDicdoc!db
+* 输入：instance_id  dbname
+* 输出：json object
+```
+{
+    "message": "文档已生成请直接下载",
+    "success": true,
+    "docurl":"http://localhost:8080/bus_files/HT_DATA数据库说明书.doc"
+}
+```
+
+###获取开发商列表 getCompanyList!resource
+* 输入：无
+* 输出：json array
+```
+[
+	{
+		id: 1,
+		companyname: "dd22",
+		regtm: "2017-08-01 13:47:47",//添加时间
+		keeper: "d",//负责人
+		mobile: "d"//联系方式
+	}
+]
+```
+
+###添加开发商 addCompany!resource
+* 输入：String companyname,String keeper,String mobile
+* 输出：json object
+```
+	{
+	    "message": "添加成功",
+	    "success": true
+	}
+```
+
+###修改开发商 updateCompany!resource
+* 输入：String id,String companyname,String keeper,String mobile
+* 输出：json object
+```
+	{
+	    "message": "修改成功",
+	    "success": true
+	}
+```
+
+###删除开发商 deleteCompany!resource
+* 输入：String id
+* 输出：json object
+```
+	{
+	    "message": "删除成功",
+	    "success": true
+	}
+```
+
+###获取应用系统列表 getAppList!resource
+* 输入：String id
+* 输出：json array
+```
+[
+	{
+		id: 2,
+		appname: "ee",
+		companyid: 1,
+		url: "d",
+		ip: "d",
+		domain: "d",
+		account: "d",
+		password: "d",
+		token: "1b23d7af9b68482d99f4d0566c3a80ce",
+		companyname: "dd22"
+		outip: "122.227.159.82" //外网ip
+	}
+]
+```
+
+###添加app addApp!resource
+* 输入：String appname,String companyid,String url,String ip,String domain,String account,String password
+* 输出：json object
+```
+	{
+	    "message": "添加成功",
+	    "success": true
+	}
+```
+
+###修改app updateApp!resource
+* 输入：String id,String appname,String companyid,String url,String ip,String domain,String account,String password
+* 输出：json object
+```
+	{
+	    "message": "修改成功",
+	    "success": true
+	}
+```
+
+###删除app deleteApp!resource
+* 输入：String id
+* 输出：json object
+```
+	{
+	    "message": "删除成功",
+	    "success": true
+	}
+```
+
+###获取数据服务列表 getServiceList!service
+* 输入：pageNum(当前页码), pageSize(每页显示的记录数); 删选条件(可以为null)：appid(所属业务系统id), path(模糊搜索), onoff(启用状态 1:启用,0:禁用), iscache(缓存设置 1:已设置, 0:未设置)
+* 输出：json array
+```
+{
+  "beginPageIndex" : 1      //页面列表的开始索引
+  "currentPage" : 1         //当前页码
+  "endPageIndex" ： 1        //页面列表的结束索引
+  "pageCount" : 1           //页数
+  "pageSize" : 10           //每页显示的记录数
+  "total" : 2               //总记录数
+  "recordList": [           //本页的数据列表
+	{
+		iscache:1,//1已设置 0未设置
+		serviceid: 1,
+		servicename: "站点雨量查询",//服务名称
+		path: "/api/4/querySTRain",//服务接口路径
+		remark: "查询所有雨量站点某时间段内雨量累计值",//服务说明
+		request_type: "POST,GET",//服务请求方式
+		response_type: "JSON",//服务响应数据格式
+		response_sample: "[{"STCD":"1103","VALUE":20}]",//返回数据示例
+		cache_type: "none",//缓存类型 none未设置 job定时缓存 request请求缓存
+		cache_job_interval: null,//缓存类型为job时，定时器的时间间隔，单位为分钟
+		cache_job_url: null,//缓存类型为job时，定时请求的url规则
+		cache_effective: null,//缓存有效期
+		regtm: "2017-08-15 14:12:02",//注册时间
+		appname: "防汛系统",//来源业务应用系统
+		from_url: "http://localhost:8080/shanhong/getRainList!SYQ",//服务提供源地址
+		from_request_type: "GET",//服务来源请求方式
+		onoff: 1,//启用状态 1启用 0停用
+		current_version: 3 //当前版本
+		his_version: 1,2 //历史版本
+		params: [//服务请求时参数信息，无参数时返回空数组[]
+			{
+				param: "tm1",//参数名
+				param_remark: "开始时间",//参数说明
+				param_type: "string",//参数数值类型
+				param_sample: "2017-08-08 08:00"//参数赋值示例
+			},
+			{
+				param: "tm2",
+				param_remark: "结束时间",
+				param_type: "string",
+				param_sample: "2017-08-08 08:00"
+			}
+		]
+	}
+]
+}
+```
+
+###设置接口启用状态 onoffService!service
+* 输入：serviceid onoff(0或1)
+* 输出：json object
+```
+	{
+	    "message": "设置成功",
+	    "success": true
+	}
+```
+
+###获取服务接口详细信息 getServiceInfo!service
+* 输入：serviceid
+* 输出：json object
+```
+{
+	servicename: "站点雨量查询",//服务名称
+	path: "/api/4/querySTRain",//服务接口路径
+	remark: "查询所有雨量站点某时间段内雨量累计值",//服务说明
+	request_type: "POST,GET",//服务请求方式
+	response_type: "JSON",//服务响应数据格式
+	response_sample: "[{"STCD":"1103","VALUE":20}]",//返回数据示例
+	cache_type: "none",//缓存类型 none未设置 job定时缓存 request请求缓存
+	regtm: "2017-08-15 14:12:02",//注册时间
+	appname: "防汛系统",//来源业务应用系统
+	from_url: "http://localhost:8080/shanhong/getRainList!SYQ",//服务提供源地址
+	from_request_type: "GET",//服务来源请求方式
+	status:"",//发布状态  reg已注册  publish已发布
+	onoff:"1",//0:停用 1:启用
+	params: [//服务请求时参数信息，无参数时返回空数组[]
+		{
+			param: "tm1",//参数名
+			param_remark: "开始时间",//参数说明
+			param_type: "string",//参数数值类型
+			param_sample: "2017-08-08 08:00"//参数赋值示例
+		},
+		{
+			param: "tm2",
+			param_remark: "结束时间",
+			param_type: "string",
+			param_sample: "2017-08-08 08:00"
+		}
+	]
+}
+```
+
+###获取当前登陆应用账号的应用信息 currentAppInfo!resource
+* 输入：无
+* 输出：json object
+```
+{
+	appid: 4,//应用系统编号
+	appname: "防汛系统",//应用系统名称
+	companyid: 1,
+	companyname:'弘泰公司',//开发商名称
+	url: "adsf",
+	ip: "ad",
+	domain: "",
+	token: "678d2214bd5d463f8ccb6d9e5f485a97"
+}
+```
+
+###获取当前登陆app账号的所有发布出去的接口列表 getAppServiceList!service
+* 输入：无
+* 输出：json array
+```
+[
+	{
+		serviceid: 1,
+		servicename: "站点雨量查询",
+		path: "/api/4/querySTRain",
+		from_url: "http://localhost:8080/shanhong/getRainList!SYQ"
+	}
+]
+```
+
+###注册接口 regService!service
+* 输入：servicename,from_url,from_request_type
+* 输出：json object
+```
+	{
+	    "message": "注册接口成功",
+	    "success": true,
+	    "data":"1"//注册成功后返回刚刚注册的接口ID
+	}
+```
+
+###检测方法名是否重复 checkMethod!service
+* 输入：appid method
+* 输出：json object
+```
+	{
+	    "message": "方法名可使用",
+	    "success": true,
+	}
+```
+
+###添加服务参数 addParam!service
+* 输入：serviceid remark param type sample
+* 输出：json object
+```
+	{
+	    "message": "参数保存成功",
+	    "success": true,
+	}
+```
+
+###删除服务参数 deleteParam!service
+* 输入：serviceid param
+* 输出：json object
+```
+	{
+	    "message": "删除参数成功",
+	    "success": true,
+	}
+```
+###修改服务接口信息 updateService!service
+* 输入：jsondata 注意这里jsondata参数的值是{}对象转换为的JSON字符串，key值及含义如下
+```
+	 * @param serviceid 服务接口ID
+	 * @param servicename 服务接口名称
+	 * @param method 方法名
+	 * @param remark 接口说明
+	 * @param response_type 响应数据类型
+	 * @param response_sample 响应数据示例
+	 * @param cache_type 缓存类型
+	 * @param cache_job_interval 缓存间隔
+	 * @param cache_effective 缓存有效期
+	 * @param from_url 服务来源地址
+	 * @param from_request_type 服务来源地址的请求方式
+```
+* 输出：json object
+```
+	{
+	    "message": "修改服务接口成功",
+	    "success": true,
+	}
+```
+
+###发布/修改服务接口信息 publishService!service
+* 输入：jsondata 注意这里jsondata参数的值是{}对象转换为的JSON字符串，key值及含义如下
+```
+	 * @param serviceid 服务接口ID
+	 * @param servicename 服务接口名称
+	 * @param method 方法名
+	 * @param remark 接口说明
+	 * @param response_type 响应数据类型
+	 * @param response_sample 响应数据示例
+	 * @param cache_type 缓存类型
+	 * @param cache_job_interval 缓存间隔
+	 * @param cache_effective 缓存有效期
+	 * @param from_url 服务来源地址
+	 * @param from_request_type 服务来源地址的请求方式
+	 * @param params 之前服务的参数数组
+```
+* 输出：json object
+```
+	{
+	    "message": "发布服务接口成功",
+	    "success": true,
+	}
+```
+
+###删除接口 deleteService!service
+* 输入：serviceid
+* 输出：json object
+```
+	{
+	    "message": "删除服务接口成功",
+	    "success": true,
+	}
+```
+
+###获取总平台能为当前登陆的APP提供的所有服务接口列表，带有审批状态 getServiceListWithAsk!service
+* 输入：pageNum(当前页码), pageSize(每页显示的记录数); 删选条件(可以为null)：askstatus(审批状态 0:未授权, 1:已授权, 2:待审批)
+* 输出：json array
+```
+{
+  "beginPageIndex" : 1,      //页面列表的开始索引
+  "currentPage" : 1,         //当前页码
+  "endPageIndex" ： 1,        //页面列表的结束索引
+  "pageCount" : 1,           //页数
+  "pageSize" : 10,           //每页显示的记录数
+  "total" : 2,               //总记录数
+  "recordList": [           //本页的数据列表
+	{
+		serviceid: 1,
+		servicename: "站点雨量查询",//服务名称
+		path: "/api/4/querySTRain",//服务接口路径
+		remark: "查询所有雨量站点某时间段内雨量累计值",//服务说明
+		request_type: "POST,GET",//服务请求方式
+		response_type: "JSON",//服务响应数据格式
+		response_sample: "[{"STCD":"1103","VALUE":20}]",//返回数据示例
+		cache_type: "none",//缓存类型 none未设置 job定时缓存 request请求缓存
+		cache_job_interval: null,//缓存类型为job时，定时器的时间间隔，单位为分钟
+		cache_job_url: null,//缓存类型为job时，定时请求的url规则
+		cache_effective: null,//缓存有效期
+		regtm: "2017-08-15 14:12:02",//注册时间
+		appname: "防汛系统",//来源业务应用系统
+		from_url: "http://localhost:8080/shanhong/getRainList!SYQ",//服务提供源地址
+		from_request_type: "GET",//服务来源请求方式
+		onoff: 1,//启用状态 1启用 0停用
+		params: [//服务请求时参数信息，无参数时返回空数组[]
+			{
+				param: "tm1",//参数名
+				param_remark: "开始时间",//参数说明
+				param_type: "string",//参数数值类型
+				param_sample: "2017-08-08 08:00"//参数赋值示例
+			},
+			{
+				param: "tm2",
+				param_remark: "结束时间",
+				param_type: "string",
+				param_sample: "2017-08-08 08:00"
+			}
+		],
+		askstatus:0 //申请审批状态  0未授权  1已授权  2待审批
+	}
+]
+}
+```
+
+###申请接口 askService!service
+* 输入：serviceids用逗号间隔的serviceid
+* 输出：json object
+```
+	{
+	    "message": "申请接口成功",
+	    "success": true,
+	}
+```
+
+###获取所有服务接口申请列表 getServiceAskList!service
+* 输入：无
+* 输出：json array
+```
+[
+	{
+		askid: 14,//申请ID
+		ask_appid: 4,//申请来源的应用ID
+		ask_appname: "防汛系统",//申请来源应用名称
+		tm: "2017-09-01 10:53:21",//申请时间
+		servicename: "3213",//申请的服务名称
+		path: "/api/4/321321",//申请的服务path
+		dealtm: null,//处理时间
+		result: -1,//审批状态 0拒绝 1通过 -1未处理
+		remark: "",//服务接口说明
+		from_appname: "防汛系统"//服务提供者
+	}
+]
+```
+
+###审核接口申请 dealServiceAsk!service
+* 输入：askid result(0拒绝 1通过)
+* 输出：json object
+```
+	{
+	    "message": "操作成功",
+	    "success": true,
+	}
+```
+
+###获取某app已经被授权使用的接口 hasPowerServiceList!service
+* 输入：appid from_appid服务提供者ID 取值为具体的id或者"all"
+* 输出：json array
+```
+[
+	{
+		serviceid: 3,//服务接口ID
+		servicename: "321321dsa",//服务接口名称
+		path: null,//服务接口path
+		remark: null,//服务接口说明
+		from_appname: "防汛系统"//服务接口提供者
+	}
+]
+```
+
+###获取某app未被授权的接口列表 noPowerServiceList!service
+* 输入：appid
+* 输出：json array
+```
+[
+	{
+		serviceid: 3,//服务接口ID
+		servicename: "321321dsa",//服务接口名称
+		path: null,//服务接口path
+		remark: null,//服务接口说明
+		from_appname: "防汛系统"//服务接口提供者
+	}
+]
+```
+
+###获取某app未被授权的接口列表 powerService!service
+* 输入：appid serviceids(逗号间隔的serviceid) power(1授权 0撤销授权)
+* 输出：json object
+```
+	{
+	    "message": "操作成功",
+	    "success": true,
+	}
+```
+
+###获取某应用申请的接口处理情况列表 getAskList!service
+* 输入：无
+* 输出：json array
+```
+[
+	{
+		askid: 8,
+		tm: "2017-08-30 13:47:41",//申请时间
+		dealtm: "2017-08-31 10:29:43",//处理时间
+		serviceid: 1,//申请的接口ID
+		result: 1,//处理结果
+		servicename: "站点雨量查询",//申请的接口名称
+		path: "/api/4/querySTRain",//申请的接口PATH
+		from_appname: "防汛系统"//申请的接口的服务提供者名称
+	}
+]
+```
+
+###修改管理员密码 updatePassword!user
+* 输入：oldpassword newpassword
+* 输出：json object
+```
+	{
+	    "message": "修改密码成功",
+	    "success": true,
+	}
+```
+
+###修改应用密码 updateAppPassword!resource
+* 输入：oldpassword newpassword
+* 输出：json object
+```
+	{
+	    "message": "修改密码成功",
+	    "success": true,
+	}
+```
+
+###获取所有文档列表 getAllFileList!resource
+* 输入：无
+* 输出：json array
+```
+[
+	{
+		fileid: 2,//文档ID
+		filename: "数据服务管理平台设计说明书",//文档名称
+		filepath: "/doc/数据服务管理平台设计说明书.doc",//文档Path
+		appid: 4,//来源应用ID
+		tag: "设计",//标签
+		tm: "2017-09-14 20:03:34",//提交时间
+		appname: "防汛系统"//来源应用名称
+	}
+]
+```
+
+###获取当前登陆的app的文档列表 getAppFileList!resource
+* 输入：无
+* 输出：json array
+```
+[
+	{
+		fileid: 2,//文档ID
+		filename: "数据服务管理平台设计说明书",//文档名称
+		filepath: "/doc/数据服务管理平台设计说明书.doc",//文档Path
+		appid: 4,//来源应用ID
+		tag: "设计",//标签
+		tm: "2017-09-14 20:03:34",//提交时间
+		appname: "防汛系统"//来源应用名称
+	}
+]
+```
+
+###删除文档 deleteAppFile!resource
+* 输入：fileid
+* 输出：json object
+```
+	{
+	    "message": "删除文档成功",
+	    "success": true,
+	}
+```
+
+###添加文档 addAppFile!resource
+* 输入：filename,filepath,tag（tag是文档的标签，使用逗号间隔的字符串）
+* 输出：json object
+```
+	{
+	    "message": "添加文档成功",
+	    "success": true,
+	}
+```
+
+###上传文件 /service/upload
+* 这是文件上传的通用接口
+* 输入：path（这是除了上传控件之外的一个参数，可以用来指定文档存储在那个特定文件夹下，文档资源赋值为：doc）
+* 输出：json object
+```
+	{
+	    "message": "上传文件成功",
+	    "success": true,
+	    "path":"/doc/数据服务管理平台设计说明书20170916192342.doc"//上传成功后返回文件存储的相对path，用于记录到数据库
+	}
+```
+
+###获取服务监控列表 getServiceMonitorList!service
+* 输入：无
+* 输出：json array
+```
+[
+	{
+		serviceid: 1,//服务ID
+		servicename: "站点雨量查询",//服务接口名称
+		res_status: null,//服务状态（目前服务是好的还是坏的，能不能用） 会出现三种情况：null未知 0异常 1正常
+		last_cache_tm: '2017-9-19 14:21',//最近缓存时间 null时显示- 有值时显示成月日时分 9-19 14:21
+		berequest_count: 1//被请求次数
+	}
+]
+```
+
+###获取某时间段内请求监控列表 getRequestMonitorList!service
+* 输入：tm1 tm2
+* 输出：json array
+```
+[
+	{
+		tm: "2017-09-19 21:29:35",//请求时间
+		servicename: "站点雨量查询",//请求的接口名称
+		appname: "防汛系统",//谁在请求调用服务
+		res_status: 1,//响应状态   0异常 1和2都表示正常
+		consume: 100//耗时 单位是毫秒
+	}
+]
+```
+
+###备注数据库 remarkDB!db
+* 输入：instance_id,dbname,remark
+* 输出：json object
+```
+	{
+	    "message": "备注成功",
+	    "success": true,
+	}
+```
+
+###备注数据表 remarkTable!db
+* 输入：instance_id,dbname,tablename,remark
+* 输出：json object
+```
+	{
+	    "message": "备注成功",
+	    "success": true,
+	}
+```
+
+###备注数据表 remarkField!db
+* 输入：instance_id,dbname,tablename,filedname,remark
+* 输出：json object
+```
+	{
+	    "message": "备注成功",
+	    "success": true,
+	}
+```
+
+###针对某数据库获取应用列表 getAppListWithDBBind!db
+* 输入：instance_id,dbname
+* 输出：json array
+```
+[
+	{
+		appid: 4,
+		appname: "宁波市防汛防旱指挥平台",
+		companyname: "宁波弘泰水利信息科技有限公司",
+		isbind: 1//是否绑定 1已绑定 0未绑定
+	},
+	{
+		appid: 6,
+		appname: "宁波智慧水利平台",
+		companyname: "宁波弘泰水利信息科技有限公司",
+		isbind: 0
+	},
+	{
+		appid: 7,
+		appname: "智慧水利数据服务总线",
+		companyname: "宁波弘泰水利信息科技有限公司",
+		isbind: 0
+	}
+]
+```
+
+###为某数据库绑定负责维护的应用 bindDBtoApp!db
+* 输入：instance_id,dbname,appids(appid由逗号间隔 如4,6 可为空字符串即为不需要任何应用维护此数据库)
+* 输出：json object
+```
+	{
+	    "message": "绑定成功",
+	    "success": true,
+	}
+```
+
+###获取当前登陆控制台的应用能看到的数据库列表 getDBListByApp!db
+* 输入：无
+* 输出：json array
+```
+[
+	{
+		label: "设计院VPN扩展数据库",
+		dbname: "DB_VPN",
+		sta: 8,
+		id: "8-DB_VPN",
+		instance_id: "8",
+		nodetype: "database",
+		visible: 1
+	},
+	{
+		label: "HTGQ",
+		dbname: "HTGQ",
+		sta: 10,
+		id: "8-HTGQ",
+		instance_id: "8",
+		nodetype: "database",
+		visible: 1
+	}
+]
+```
+
+###接口代理测试 testService!service
+* 输入：bus_service_id 以及该接口所需要的其他参数
+* 输出：object
+```
+{
+	consume:684,//耗时
+	response:"{}"//响应结果
+}
+```
+
+###统计平台里的服务资源概况及每个服务各提供了多少接口 staServiceResourceInfo!service
+* 输入：无
+* 输出： object
+```
+{
+	service_sum: 3,//服务接口数量
+	service_normal: 2,//正常接口数量
+	service_error: 1,//异常接口数量
+	app_sum: 3,//应用系统个数
+	detail: [
+		{
+			appid: 4,//应用ID
+			appname: "宁波市防汛防旱指挥平台",//应用名称
+			service_cnt: 3//注册的接口数量
+		},
+		{
+			appid: 6,
+			appname: "宁波智慧水利平台",
+			service_cnt: 0
+		},
+		{
+			appid: 7,
+			appname: "智慧水利数据服务总线",
+			service_cnt: 0
+		}
+	]
+}
+```
+
+###统计异常接口类表 staErrorServiceList!service
+* 输入：无
+* 输出： array
+```
+[
+	{
+		serviceid: 14,//服务接口ID
+		servicename: "获取工程经纬度",//服务接口名称
+		appid: 4,//服务提供者应用系统id
+		appname: "宁波市防汛防旱指挥平台",//应用名称
+		res_status: "0",//响应状态
+		last_res_tm: null//最近响应时间
+	}
+]
+```
+
+###统计平台服务支撑情况 staSurportInfo!service
+* 输入：无
+* 输出： object
+```
+{
+	app_sum: 3,//应用数量
+	max_appname: "智慧水利数据服务总线",//调用次数最多的应用的名称
+	max_request: 500,//调用次数最多的应用调用总次数
+	detail: [
+		{
+			appid: 4,
+			appname: "宁波市防汛防旱指挥平台",
+			power_cnt: 3,
+			request_sum: 2000,
+			today_sum: 20,
+			maxday_sum: 20,
+			maxday_date: "2017-10-19 00:00:00"
+		},{},{}...
+	]
+}
+```
+
+###统计服务请求情况 staRequestInfo!service
+* 输入：无
+* 输出： object
+```
+{
+	request_sum: 12,//请求总次数
+	today_sum: 12,//今日请求总次数
+	top3: [//今日请求最频繁的三个接口
+		{
+			servicename: "水利工程模糊检索",//接口名称
+			serviceid: 1,//接口ID
+			request_cnt: 8//请求次数
+		},
+		{
+			servicename: null,
+			serviceid: 0,
+			request_cnt: 3
+		},
+		{
+			servicename: "用名称检索水利工程",
+			serviceid: 3,
+			request_cnt: 1
+		}
+	]
+}
+```
+
+###统计某时间段内服务的日调用过程 staRequestDayLine!service
+* 输入：tm1 tm2
+* 输出： array
+```
+[
+	{
+		tm: "2017-10-16",//时间
+		cnt: 1//调用次数
+	},
+	{
+		tm: "2017-10-17",
+		cnt: 1
+	},
+	{
+		tm: "2017-10-18",
+		cnt: 1
+	},
+	{
+		tm: "2017-10-19",
+		cnt: 1
+	},
+	{
+		tm: "2017-10-20",
+		cnt: 8
+	}
+]
+```
+
+###统计数据资源概况及数据库统计列表 staDataResourceInfo!db
+* 输入：无
+* 输出： array
+```
+{
+	db_sum: 212,//数据库总数
+	field_sum: 148394,//字段总数
+	instance_sum: 2,//实例总数
+	sta_avg: 7,//平均完整率
+	table_sum: 12541,//表总数
+	detail: [//详情
+		{
+			dbname: "AQJC",//数据库名
+			dbremark: "first",//数据库名称（中文）
+			remarked_cnt: 7,
+			db_cnt: 1,
+			table_cnt: 12,
+			field_cnt: 78,
+			sta: 7,//数据库字典完整率
+			instance_id: "8",
+			instance_name: "MSSQLSERVER"
+		},{},{}...
+	],
+}
+```
+
+###接口缓存设置 setServiceCache!service
+* 输入：serviceid、cache_job_interval、cache_effective
+* 输出：object
+```
+	{
+	    "message": "设置成功",
+	    "success": true,
+	}
+```
+
+
+###获取实例列表 getInstanceList!db
+* 输入：无
+* 输出：array
+```
+[
+	{
+		instance_id: 8,//实例编码ID
+		instance_name: "MSSQLSERVER",//实例名
+		name: "100.4数据服务器",//实例名称中文
+		ip: "192.168.100.4",//IP
+		port: "1433",//端口
+		dbtype: "MSSQL",//数据库类型
+		nodetype: "instance"//
+	}
+]
+```
+
+###根据示例ID获取数据库列表 getDBlistByIID!db
+* 输入：instance_id
+* 输出：array
+```
+[
+	{
+		label: "first",//中文名称
+		dbname: "AQJC",//数据库名
+		sta: 8//完整率
+	},
+	{
+		label: "设计院VPN扩展数据库",
+		dbname: "DB_VPN",
+		sta: 50
+	}
+]
+```
+
+###根据服务id获取授权应用 getAuthorizedApp!service
+* 输入：serviceid
+* 输出：array
+```
+[
+	{
+		appid: 4,
+		appname: "宁波市防汛防旱指挥平台",//授权应用
+	},
+	{
+		appid: 8,
+		appname: "标准化",//授权应用
+	}
+]
+```
+
+###根据服务id获取调用情况(最近1天的被调用日志列表) getRequestMonitorListBySid!service
+* 输入：serviceid
+* 输出：array
+```
+[
+	{
+		tm: "2017-10-30 15:41:35",
+		servicename: "水利工程模糊检索",
+		appname: "宁波市防汛防旱指挥平台",
+		res_status: 1,
+		consume: 579
+	},
+	{
+		tm: "2017-10-30 15:41:00",
+		servicename: "水利工程模糊检索",
+		appname: "宁波市防汛防旱指挥平台",
+		res_status: 0,
+		consume: 22
+	}
+]
+```
+
+###根据关键词查询字段 searchField!db
+* 输入：keyword
+* 输出：array
+```
+[
+	{
+		dbDescription: "实时工情业务库23",
+		dbname: "HTGQ",
+		field: "STCD",
+		instance: "8",
+		instanceName: "100.4数据服务器"
+		tbDescription: "—"
+		tbname："SWINF1"
+	},
+]
+```
+
+###运行SQL语句 executeSQL!db
+* 输入：instance_id, dbname, sql
+* 输出：object
+```
+{
+	"affectedRow":0,  //受影响的行
+	"data":[          //结果
+		{
+			"BZID":"1",
+			"TM":1386835284000,
+			"ExactRate":98.0,
+			"CountNum":18080,
+			"WarnCode":"8000"
+		}
+	],
+	"errorMessage":null, //报错信息
+	"size":1,         //记录数
+	"success":true,   //是否成功
+	"time":"1217ms"   //查询时间
+}
+```
+
+###获取服务接口详细信息 getServiceInfo!service
+* 输入：serviceid, his_version
+* 输出：json object
+```
+{
+	servicename: "站点雨量查询",//服务名称
+	path: "/api/4/querySTRain",//服务接口路径
+	remark: "查询所有雨量站点某时间段内雨量累计值",//服务说明
+	request_type: "POST,GET",//服务请求方式
+	response_type: "JSON",//服务响应数据格式
+	response_sample: "[{"STCD":"1103","VALUE":20}]",//返回数据示例
+	cache_type: "none",//缓存类型 none未设置 job定时缓存 request请求缓存
+	cache_effective: 3,
+	cache_job_interval: 30,
+	cache_job_url: null ,
+	regtm: "2017-08-15 14:12:02",//注册时间
+	appname: "防汛系统",//来源业务应用系统
+	from_url: "http://localhost:8080/shanhong/getRainList!SYQ",//服务提供源地址
+	from_request_type: "GET",//服务来源请求方式
+	status:"",//发布状态  reg已注册  publish已发布
+	onoff:"1",//0:停用 1:启用
+	params: [//服务请求时参数信息，无参数时返回空数组[]
+		{
+			param: "tm1",//参数名
+			param_remark: "开始时间",//参数说明
+			param_type: "string",//参数数值类型
+			param_sample: "2017-08-08 08:00"//参数赋值示例
+		},
+		{
+			param: "tm2",
+			param_remark: "结束时间",
+			param_type: "string",
+			param_sample: "2017-08-08 08:00"
+		}
+	]
+}
+```
+```
+###获取地图服务器  getMapServerList!map
+* 输入：
+* 输出：array
+```
+[
+	{
+		"id": "1",     //地图服务id
+		"map_name": "弘泰地图服务",
+	},
+]
+```
+
+###根据id获取地图服务器  getMapServerById!map
+* 输入：id
+* 输出：object
+```
+{
+  "id": "1",
+  "map_name": "弘泰地图服务",
+  "map_url": "https://172.16.35.15:6443/arcgis",
+  "username": "siteadmin",
+  "password": "htwater"
+}
+```
+
+###添加地图服务器  addMapServer!map
+* 输入： map_name, map_url, username, password
+* 输出：object
+```
+{
+  "success": true,
+  "message": "添加地图服务器成功",
+}
+```
+
+###修改地图服务器  updateMapServer!map
+* 输入： map_name, map_url, username, password, id
+* 输出：object
+```
+{
+  "success": true,
+  "message": "修改地图服务器成功",
+}
+```
+
+###删除地图服务器  deleteMapServer!map
+* 输入：id
+* 输出：object
+```
+{
+  "success": true,
+  "message": "删除地图服务器成功",
+}
+```
+
+
+
+###获取arcgis地图服务资源  getMapServices!map
+* 输入：path, id
+* 输出：object
+```
+{
+  "folderName": "/",
+  "description": "Root folder",
+  "webEncrypted": false,
+  "isDefault": false,
+  "folders": [
+    "ht_test"
+  ],
+  "foldersDetail": [
+    {
+      "folderName": "ht_test",
+      "description": "None",
+      "webEncrypted": false,
+      "isDefault": false
+    }
+  ],
+  "services": [
+    {
+      "folderName": "/",
+      "serviceName": "CXMap_print",
+      "type": "GPServer",
+      "description": ""
+    }
+  ]
+}
+```
+
+###测试数据库服务器连接 checkDb!db
+*输入：ip, port, instance_name,account, password, dbtype
+*输出：object
+```
+{
+  "success": true
+}
+```
+
+###添加资源目录的资源 addMateDataResources!db
+*输入：code(资源目录id),resourceId(资源id 多个id用,分开, 数据库资源id(instance_id-tbname) 服务资源id(serviceid)),resourceType(0:数据库资源 1:服务资源)
+*输出：object
+```
+{
+  "success": true
+}
+```
+
+###获取资源目录的资源 getMateDataResources!db
+*输入：code(资源目录id),resourceType(0:数据库资源 1:服务资源)
+*输出：array
+```
+[
+  {}
+]
+```
+
+###获取资源对应的资源目录id getMateDataCode!db
+*输入：resourceId(数据库资源id(instance_id-tbname) 服务资源id(serviceid)),resourceType(0:数据库资源 1:服务资源)
+*输出：object
+```
+{
+  "matedata_code": "lake"
+}
+```
+
+</xmp>
+
+<script src="js/strapdown.js"></script>
+<script src="http://demo.htwater.net:8080/shanhong/libs/jquery/jquery-1.11.1.min.js"></script>
+<script>
+	var index = 0;
+	$("h3").each(function(a,b){
+		b.innerHTML = index+"、"+b.innerHTML;
+		index++;
+	});
+</script>
+</body>
+</html>
